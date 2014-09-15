@@ -1,0 +1,532 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{definition}{Definition}
+\newtheorem{property}{Property}
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{notation}{Notation}
+\newtheorem{theorem}{Theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Algorithms and pseudo code
+\usepackage{verbatim}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+% Graphics and display
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{multirow}
+
+% Math symbols and environments
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd} % \varcurlyvee
+
+
+\usepackage{calc}%#%
+\usepackage{enumitem} %%% used in framed graph
+
+\date{ }
+% TikZ
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\usepackage{tikz-3dplot}
+
+\definecolor{myyellow}{RGB}{255,255,150}
+\definecolor{mylavender}{RGB}{125,249,255}
+\definecolor{mygreen}{RGB}{144,238,14}
+\definecolor{myred}{RGB}{255,0,0}
+
+\newcommand\mytext[3][\scriptsize]{#2\\#1 #3}
+\newcommand\mynode[4][]{%
+  \node[mynode,#1,text width=\the\dimexpr#2cm] (#3) {\mytext{#3}{#4}}; 
+}
+\newcommand\mynot[4][]{%
+  \node[mynot,#1,text width=\the\dimexpr#2cm] (#3) {\mytext{#3}{#4}}; 
+}
+
+\setcounter{secnumdepth}{4}
+
+%%%%%%%%%%%%%%%%
+%%%% Macros %%%%
+%%%%%%%%%%%%%%%%
+
+%%% Math
+\newcommand{\nat}{\mathbb{N}}   % Natural numbers
+\newcommand{\rat}{\mathbb{Q}}   % Rational numbers
+\newcommand{\real}{\mathbb{R}}  % Real numbers
+\newcommand{\runit}{[0, 1]}    % The real unit interval
+
+
+% = with "hip." on the top, useful for indicating where a hypothesis comes in
+\newcommand{\heq}{\stackrel{\text{\fontsize{3pt}{3pt}\selectfont hip.}}{=}}
+% = because of the de Morgan laws.
+\newcommand{\dmeq}{\stackrel{\text{\tiny{dM}}}{=}}
+
+
+%%% Sets
+\newcommand{\args}{\mathcal{A}} % Set of all arguments
+\newcommand{\att}{\mathcal{R}}  % Set of all attacks
+\newcommand{\valueset}{L}
+
+\newcommand{\obj}{\mathcal{O}} % Set of all arguments and attacks as a union
+
+%%% Votes on arguments
+\newcommand{\varg}{V_{\args}}   % Function giving votes on arguments
+\newcommand{\vargpro}[1]{\varg^+\left(#1\right)} % Pro votes on arguments
+\newcommand{\vargcon}[1]{\varg^-\left(#1\right)} % Con votes on arguments
+\newcommand{\vargtot}[1]{\varg^{max}\left(#1\right)} % Max votes on arguments
+
+%%% Votes on attacks
+\newcommand{\vatt}{V_{\att}}   % Function giving votes on attacks
+\newcommand{\vattpro}[1]{\vatt^+\left(#1\right)} % Pro votes on attacks
+\newcommand{\vattcon}[1]{\vatt^-\left(#1\right)} % Con votes on attacks
+
+%%% Attack relations
+% Attackers of a given argument
+\newcommand{\attackers}[1]{\att^\text{-}\left(#1\right)} 
+% Attackers of a given argument for the alternative framework F'
+\newcommand{\altattackers}[1]{\att^{\prime\text{-}}\left(#1\right)}
+% Ancestors of given argument according to the attack relation
+\newcommand{\ancestors}[1]{\att^*\left(#1\right)} 
+
+%%% Frameworks
+\newcommand{\safid}{F}               % A single SAF, given by identifier
+\newcommand{\safset}{\mathcal{F}}    % Set of all SAFs
+
+\newcommand{\saf}{\safid = \safbody} % Framework id and respective tuple
+\newcommand{\safbody}{\langle \args, \att, \varg, \vatt \rangle} % SAF tuple
+\newcommand{\oldsaf}{\safid = \oldsafbody} % Ex Framework id and respective tuple
+\newcommand{\oldsafbody}{\langle \args, \att, V \rangle} % old SAF tuple
+% Alternative framework, same as \safbody but with ' everywhere ;)
+\newcommand{\altsafbody}{\langle \args', \att', \varg', \vatt' \rangle} 
+
+\newcommand{\safbodyO}{\langle \args, \att, \obj, V \rangle} % SAF tuple with objects
+\newcommand{\safO}{\safid = \safbodyO} % Framework id and respective tuple with objects
+
+%%% Semantics
+\newcommand{\semid}{\mathcal{S}}        % Semantic framework identifier
+% Semantic framework tuple
+\newcommand{\sembody}{\left\langle \valueset,\SAFand_1, \SAFand_2,\SAFor,\lnot,\tau \right\rangle}
+\newcommand{\semdef}{\semid = \sembody}     % Semantic framework id and tuple
+\newcommand{\semprod}[1]{\semid^\cdot_{#1}} % Product semantic framework
+\newcommand{\semsub}{\semid^\text{-}}       % Subtraction semantic framework
+\newcommand{\semmax}{\semid^\text{max}}     % Max semantic framework
+
+\newcommand{\sembodyNew}{\left\langle \valueset,\SAFand_\mathcal{A}, \SAFand_\mathcal{R},\SAFor,\lnot,\tau \right\rangle} %New semantic body
+\newcommand{\sembodyNewE}{\left\langle \valueset,\SAFand_\mathcal{A}, \SAFand_\mathcal{R},\SAFor,\lnot,\tau_{e} \right\rangle} %New semantic body
+
+\newcommand{\SAFand}{\curlywedge}     % Logical and for SAF equations 
+\newcommand{\SAFor}{\curlyvee}        % Logical or for SAF equations
+\DeclareMathOperator*{\SAFOr}{\bigcurlyvee} % Big or notation, works as \sum
+                             %\varcurlyvee also works, but is smaller
+\DeclareMathOperator*{\SAFAnd}{\bigcurlywedge} % Big and notation, works as \sum
+
+\newcommand{\modelset}{\mathcal{M}}   % Set of all models
+
+
+%#% old commands
+\newcommand{\afit}{\textit{AF}}
+\newcommand{\af}{\afit = \langle \args, \att \rangle}
+\newcommand{\vote}{V}
+\newcommand{\sem}{\mathcal{S}}
+
+\newcommand{\ssv}{\mathcal{V}}
+\newcommand{\tv}{\mathcal{T}}
+\newcommand{\pv}{\mathcal{P}}
+\newcommand{\xv}{X}
+\newcommand{\ev}{\mathcal{E}}
+
+\newcommand{\safit}{F}
+
+\newcommand{\tupd}{\curlywedge}
+\newcommand{\tatt}{\curlyvee}
+\newcommand{\Tatt}{\varcurlyvee}
+
+\newcommand{\argarray}{\{x_1, ..., x_n\}}
+
+\newcommand{\voteset}{\mathcal{V}}
+\newcommand{\vpro}{\vote^+}
+\newcommand{\vcon}{\vote^-}
+
+%%% Mappings
+\newcommand{\mapping}{\Phi}
+
+%%% Macro for framed graph
+\newlist{tikzitem}{itemize}{1}
+\setlist[tikzitem,1]{label=$\bullet$,nolistsep,leftmargin=*}
+
+%%% Normalization related stuff
+\newcommand{\dataset}{\mathcal{D}}   % Data set
+\newcommand{\clusterset}{\mathcal{C}}   % Cluster set
+\newcommand{\ssset}{\mathcal{T}}   % Social support set
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\date{}
+\title{Normalization of Social Models in Social Argumentation Frameworks}
+\maketitle
+
+\section{Preliminaries}
+
+
+\begin{definition}[Social argumentation frameworks]
+A \emph{social argumentation framework} is a 4-tuple $\safO$, where
+\begin{itemize}
+  \item $\args$ is the set of arguments,
+  \item $\att \subseteq \args \times \args$ is a binary attack relation between arguments,
+  \item $\obj = \args \cup \att$ is the set of objects, composed by the union of the sets of arguments and attack relations,
+  \item $V : \obj \to \nat \times \nat$ stores the crowd's pro and con votes for each object.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Vote Aggregation Function]
+\label{def:voteAgg}
+
+Given a totally ordered set $\valueset$ with top and bottom elements $\top$, $\bot$, a voting function $V$ and a set of objects $\obj$, a vote aggregation function $\tau$ is any function such that $\tau: \obj  \times {2}^{\obj} \to L$.
+\end{definition}
+
+
+
+\begin{definition}[Semantic Framework]
+\label{def:semfram}
+A semantic framework is a 6-tuple \\$\sembodyNew$ where:
+
+\begin{itemize}
+  \item $\valueset$ is a totally ordered set with top and bottom elements $\top$, 
+$\bot$, containing all possible valuations of an argument. 
+
+  \item $\SAFand_\args,\SAFand_\att:\valueset\times \valueset\rightarrow \valueset$, are two binary algebraic operations used to restrict strengths to given values.
+  
+  \item $\SAFor:\valueset\times \valueset\rightarrow \valueset$, is a binary algebraic operation on argument valuations used to combine or aggregate valuations and strengths.
+  
+  \item $\lnot:\valueset\rightarrow \valueset$ is a unary algebraic operation for computing a restricting value corresponding to a given valuation or strength.
+  
+%  \item $\tau$ is a vote aggregation function which given some context, aggregates positive and negative votes into a social support value.
+
+  \item $\tau$ is a vote aggregation function which, given the votes, determines the social support of an object within a set of objects.
+
+\end{itemize}
+\end{definition}
+
+\begin{notation}
+Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework. Then, let
+\begin{itemize}
+\item
+\begin{itemize}
+\item $V^{+} (o) \triangleq x$ denote the number of positive votes for object $o$,
+\item $V^{-} (o) \triangleq y$ denote the number of negative votes for object $o$,
+\item $v^r: \obj \to \real$ be a function s.t. $v^r(o) \triangleq \frac{x}{x + y}$,
+%S \item $v^t: \obj \to \nat$ be a function s.t. $v^t(o) \triangleq x + y$,  
+\end{itemize}
+whenever $V(o) = (x, y)$,
+\\
+\item $V: 2^\obj \to 2^{\nat \times \nat}$ be a function s.t. $V(\mathcal{O}^{'}) = \{V(o)$ $|$ $o \in \mathcal{O}^{'}\}$,
+\item $V^{t}: 2^\obj \to 2^{\nat \times \nat}$ be a function s.t. $V^t(\mathcal{O}^{'}) = \{V^t(o)$ $|$ $o \in \mathcal{O}^{'}\}$,
+\item $max: 2^{\nat} \to \nat$ be a function s.t. it returns the maximum value amongst the natural numbers from the non-empty multiset given as the input.
+\item $min: 2^{\nat} \to \nat$ be a function s.t. it returns the minimum value amongst the natural numbers from the non-empty multiset given as the input.
+\item  $\ssset = \{\tau(a) | a \in \args$\} be the multiset of social support values of all arguments.
+\item $\attackers{a} \triangleq \{a_i \in \args: (a_i, a) \in \att\}$ be the set of direct attackers of an argument $a \in \args$, 
+\item$$\SAFOr_{x \in X} x \triangleq\left(\left(\left(  x_{1}\SAFor x_{2}\right) \SAFor...\right)\SAFor x_{n}\right)$$ $X=\left\{  x_{1},x_{2},...,x_{n}\right\}$ denote the aggregation of a multiset of elements of $\valueset$. 
+\end{itemize}
+\end{notation}
+
+\begin{definition}[Model] 
+\label{def:model}
+  Let $\safO$ be a social argumentation framework, $\sem = \sembodyNew$ be a semantic framework. An $\semid$-model of $\safid$ is a total mapping $M : \args \rightarrow \valueset$ such that for all $a \in \args$,
+  $$\displaystyle M(a) = \tau(a, \args ) \SAFand_\args \lnot \SAFOr_{a_i \in \attackers{a}} \left(\tau\left((a_i, a), \att \right) \SAFand_\att M\left(a_i\right)\right)$$
+\end{definition}
+
+\begin{definition}[Enhanced Vote Aggregation]
+\label{def:enhVoteAgg}
+Given a voting function $V$ and a set of objects $\obj$, enhanced vote aggregation function
+$\tau_{e}:\obj  \times {2}^{\obj} \rightarrow\lbrack0,1]$ is the vote aggregation function such that
+\[
+\tau_{e}  (o, \mathcal{O})  = \left\{
+\begin{array}
+[c]{lll}
+0 &  & V(o) = (0,0)\\
+\frac{v^{+}(o)}{v^{t}(o)+\frac{1}{max(v^{t}(o \cup \mathcal{O}))}} &  & \text{otherwise}%
+\end{array}
+\right.
+\]
+\end{definition}
+
+\begin{definition}
+[Enhanced Product Semantics]An enhanced product semantic framework is any
+$\mathcal{S}_{e}^{\cdot}=\left\langle [0,1],\tau_{e
+},\curlywedge,\curlyvee,\lnot\right\rangle $ where 1) $x_{1}\curlywedge
+x_{2}=x_{1}\cdot x_{2}$, 2) $x_{1}\curlyvee x_{2}=x_{1}+x_{2}-x_{1}\cdot
+x_{2}$, 3) $\lnot x_{1}=1-x_{1}$
+\end{definition}
+
+\begin{conjecture}
+\label{conj:1model}
+Let $\safO$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, $\safid$ has one and only one $\semid_{e}^{.}-model.$
+
+\end{conjecture}
+
+\begin{notation}
+Let $\safO$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, under the assumption that Conjecture \ref{conj:1model} holds, let 
+\begin{itemize}
+\item $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments.
+\end{itemize}
+\end{notation}
+
+
+
+
+
+%%PROPERTY ORNEGI%%
+\begin{comment}
+\begin{property}
+\label{P1} [Absolute argument freeness] \\
+Let $\tau$ be a a vote aggregation function given a set of values $\valueset$, a set of objects $\obj$ and a value function $V$. We say that $\tau$ is 'absolute argument free' if
+% $X$ be a set of pairs of integers. %% <== sozlu hali
+\begin{center}
+$\forall o \in \obj$, $\tau (o, \obj) \neq \top$.
+\end{center}
+\end{property}
+\end{comment}
+%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{property}[]
+%\end{property}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% SECTION on Normalization
+\section{Normalization of Model Evaluations}
+
+%\item $Y = \{\rho(d) | a \in \dataset\}$
+
+
+\subsection{Problem domain}
+We have some dataset $\dataset$ containing the multiset of model evaluation values for a social abstract argumentation framework under product semantics. The values $\forall d \in \dataset$ lay between the interval $[0,1] \in \mathbb{R}$.
+
+Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\rho: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas until some value close to mean density is reached.
+
+The method of remapping may introduce some distortions or biases into the data. However in this case distortions are deliberately introduced in order to better expose the information content. 
+
+\subsubsection{Characterization of Normalized Sets}
+
+In this section we try to find out the parameters that define whether a dataset is \textit{normalized} or not. However the findings are at a preliminary level.
+
+At this point, two values that I believe to be relevant are:
+\begin{itemize}
+\item The ratio between the range of the model evaluations and the range of the social support values
+
+\begin{center}
+ $\frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)}$
+\end{center}
+\item The ratio between the variance of the model evaluations and the variance of the social support values
+
+\begin{center}
+$\frac{Var(\dataset)}{Var(\ssset)}$
+\end{center}
+\end{itemize}
+
+In the following subsection you may find the narrative of my gradual thought process in coming up with these two elements. But before that, below with Definition \ref{def:normSet} we take our first shot at defining what a normalized set is, by incorporating the aforementioned the parameters.
+
+
+\begin{definition} [Normalized dataset]
+\label{def:normSet}  
+Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic variance mapping $Var: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
+\begin{itemize}
+\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, when $r_1  \geq r_2$
+\item $r_3 \geq \frac{Var(\dataset)}{Var(\ssset)} \geq r_4$ , when $r_3  \geq r_4$
+\end{itemize}
+\end{definition}
+
+%%PROPERTY ORNEGI%%
+\begin{comment}
+\begin{example}
+Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att =\{\}.$
+\end{example}
+\end{comment}
+%%%%%%%%%%%%%
+
+\subsubsection{Discussion on the Characterization of Normalized Sets}
+
+Our initial suspicion was that whenever all model evaluations are very close to zero, this problem originates because the argumentation graph is strongly connected and this collection of datapoints $\dataset$ needs normalization. However consider the following setting:
+
+\begin{example}
+Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \emptyset.$
+\end{example}
+
+In addition assume that all the social support values are extremely low. Since the attack set is empty, the model evaluation values for the arguments will be equal their social support values. So here the structure of the graph is not to blame. The model evaluations are low because of the popular opinion and thus probably the dataset should be left this way, it should not be normalized.
+ 
+In order to exaggerate the example and display the situation clearer, we have taken the attack set to be empty. One may argue that to identify such a scenario it's enough to check how dense the argumentation graph is. However even if $\att$ all possible edges at full strength, the resulting model evaluations would be pretty close to the previous values since the social support is low for all the arguments. \emph{Thus the graph structure is not a reliable indicator in identifying whether a dataset that requires normalization.}
+
+At this point I thought comparing the ranges of the social support values and the model evaluations might give us an idea. From Notation $1\&2$ please remember that $\ssset$ is the multiset of all social supports and $\dataset$  is the multiset of model evaluations of all arguments in the framework. In this particular example it would follow that  $\frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \simeq 1$. This would hint that the model evaluations have not shifted too far from the social support values. 
+
+\vspace{3mm}
+However it appears that considering the ranges by itself is not sufficient as well. To see this, consider the following example:
+
+\begin{example}
+Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1)\}.$
+\end{example}
+
+Assume all the arguments are at full strength. Then under product semantics the model evaluations would follow as $M(a_1) = M(a_2) = M(a_3) \simeq 0.33$.
+
+Now let's add another argument to the system (also with perfect social support) that only attacks to the first argument:
+
+\begin{example}
+Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3, a_4\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1), (a_4,a_1)\}.$
+\end{example}
+
+Now with addition of a single argument and attack relation we have $M(a_4) = M(a_2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
+
+Since variance measures how far a set of numbers is spread out, the relative measure of the two multisets' variances, $\frac{Var(\dataset)}{Var(\ssset)}$ may overcome the shortcoming of only taking ranges into consideration. 
+
+With these two ratio values, we obtain information on both the relative size of the sub-interval the datapoints are located at and also on the pattern they are spread. 
+
+As you might see in Definition \ref{def:normSet}, I've tried to restrain the envisioned values of the two rations with some constants. Currently I've not been able to set these values yet, and maybe in future we may choose to replace these constants with some other terms. However I believe in order to be able to call a dataset \emph{normalized}, we should aim for both of these ratios to be close to 1. 
+
+Undoubtedly I've to study this subject in more detail to find out the optimal range for these values. I might also uncover more parameters with regards to the notion of normalized sets. 
+
+% We have some control on both the interval and the distribution bla bla
+
+\subsection{Characterization of Normalizing Mappings}
+
+The approach we adopt in this section is first defining a list of desirable properties that a normalizing mapping $\rho: \dataset  \rightarrow  [0,1]$ may possess.  
+Then in the next section we will follow my defining some concrete classes of normalizing mappings which contain a subset the properties defined in the current section. This section 
+
+\vspace{3mm}
+For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\rho: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \real \times \real \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
+
+\begin{property}  [Bottom argument] The argument of a context with the bottom value should not attain any strength in the normalized mutliset.
+\begin{center}
+$d = \bot \Rightarrow \rho(d) = 0$	%$M(a) = \bot \Rightarrow \rho(M(a)) = 0$
+\end{center}
+\end{property}
+
+\begin{property}  [Guarantee for the existence of arguments] An argument with some social strength should never be diminished to the value of zero through normalization.
+\begin{center}
+$d \neq \bot \Rightarrow \rho(d) \neq 0$
+\end{center}
+\end{property}
+
+\begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation should be limited by the original argument's social support.
+\begin{center}
+$ \rho(d) \leq \tau(a)$
+\end{center}
+\end{property}
+
+\begin{property} [Conservation of relative ordering] The relative order between the pairs of normalized model evaluations should be preserved.
+\begin{center}
+ $d_1 > d_2 \Longrightarrow \rho(d_1) > \rho(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
+\end{center}
+\end{property}
+
+\begin{property} [Conservation of distance ordering] The relative order between the distance of pairs of normalized model evaluations should be preserved. 
+\begin{center}
+ $\bigtriangleup(d_1, d_2) > \bigtriangleup(d_3, d_4) \Longrightarrow 
+\bigtriangleup(\rho(d_1), \rho(d_2)) > \bigtriangleup(\rho(d_3), \rho(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
+\end{center}
+\end{property}
+
+
+Even all together, these properties still give way to very flexible mapping definitions. We have to define some property based on a concept that could capture the essence of specifically dense areas of the set of model evaluations. In the light of this, we benefit from the study of cluster analysis.
+
+Very crudely, our objective via utilizing cluster analysis is to identify groups of objects that are very similar with regard to their values. Before going into more detail, firstly we need to formally define what a \textit{cluster} is.  In the literature, there are many definitions with respect to clusters. In our context we will  define them closely to the \textit{partitions} from the classical set theory via updating the definition accordingly with respect to multisets. 
+
+\begin{definition} [Cluster]
+A family of multisets $\clusterset$ is a clustering of a multiset $X$ and every element C of $\clusterset$ is a cluster if and only if all of the following conditions hold:
+
+\begin{itemize}
+\item Set of clusters does not contain the empty set.
+\begin{center}
+$\emptyset \notin \clusterset$
+\end{center}
+\item (Collectively exhaustive) The sum of the multisets in $\clusterset$ is equal to $X$. 
+\begin{center}
+$\biguplus _{C \in \clusterset}C = X$
+\end{center} 
+\item (Mutually exclusive) Distinct multisets do not contain shared elements. %The intersection of any two distinct multisets in $\clusterset$ is empty
+\begin{center}
+$(C_i, C_j \in \clusterset) \wedge (C_i \neq C_j) \Longrightarrow (C_i \wedge C_j = \emptyset)$ 
+%$\forall x \in X$ if $x\in C_i$ then $x \notin C_j$, when $i \neq j$
+\end{center}
+
+\end{itemize}
+\end{definition}
+
+As mentioned clustering is the task of grouping a set of objects in such a way that objects in the same cluster are more similar (in some sense or another) to each other than to those in other cluster. So we should also define the concept of \textit{similarity} in a formal manner. Different procedures adopt different similarity functions  $\bigtriangleup: \real \times \real \rightarrow \real$ when grouping the most similar objects into clusters. We have a single clustering variable, the model evaluation of arguments. Thus using the generic distance function as the similarity measure is a possibility. 
+
+We continue by stating two more preliminary definitions that we will utilize in our last property. 
+
+
+\begin{definition} [Separated points] 
+Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ when $i \neq j$. 
+\end{definition}
+
+\begin{definition} [Spacing] 
+The spacing of a clustering $\clusterset$ is the distance between the closest together pair of separated points,
+$min_{separated (p,q)}\bigtriangleup(p,q)$.
+\end{definition}
+
+One last discussion before we continue to the last property is $k$, the number of clusters. Some clustering procedures require $k$ to be defined by the user manually, and the rest compute it as the starting step of the procedure. The problem with the family of clustering methods that compute the number of clusters by themselves is that they don't scale well. They have a high time-complexity, in all cases exceeding the cubic time. Thus we may either use a method like Monte Carlo to generate an artificial $k$ and clustering centers then continue with the efficient methods, or use the inefficient but \textit{self-computing} methods initially and then switch to the efficient ones.
+
+
+\begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\rho: \dataset  \rightarrow  [0,1]$ should maximize the spacing over a clustering $\clusterset$ with $k$-clusters.
+\end{property}
+
+
+
+
+
+
+
+
+%Our first goal is characterizing the \emph{normalized data} within a context through defining a set of desirable properties. 
+
+%\hspace{20mm}
+
+
+
+
+
+
+\subsection{Classes of Normalizing Mappings}
+%SLOTA'dan bak
+
+Here we define some concrete classes of normalizing mappings which all adhere to a subset of desired properties defined in the previous section. 
+
+The purpose of this section is just to display that different envisioned uses may require functions that satisfy different collections of properties. 
+
+\begin{definition} [Perfect normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 3, 4, 5 and 6.
+\end{definition}
+
+Property 3 emphasizes the importance of the popular opinion. It carries great significance when defining the formal backbones of the framework. However we may choose to allow the normalized values to go beyond the social support values on the GUI part, with the goal of a more clear display of the argumentation graph. Thus we may choose to not require the particular function to hold for Property 3.
+
+\begin{definition} [GUI-friendly normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 4, 5 and 6.
+\end{definition}
+
+Right now we envision that the process of clustering will play a key role in our generic normalization function. On the other hand surely it will increase the time-complexity of the method. Thus perhaps in situations where we're more concerned with the time the algorithm takes, then the precision of the output, we may define the normalization function without taking the clustering property into account.
+
+\begin{definition}[Fast normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 3, 4 and 5.
+\end{definition}
+
+%BIZIM PAPER CITATION
+%\cite{eml2013esaf}
+
+\end{document}
