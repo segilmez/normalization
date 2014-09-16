@@ -243,7 +243,7 @@ whenever $V(o) = (x, y)$,
 \item $V^{t}: 2^\obj \to 2^{\nat \times \nat}$ be a function s.t. $V^t(\mathcal{O}^{'}) = \{V^t(o)$ $|$ $o \in \mathcal{O}^{'}\}$,
 \item $max: 2^{\nat} \to \nat$ be a function s.t. it returns the maximum value amongst the natural numbers from the non-empty multiset given as the input.
 \item $min: 2^{\nat} \to \nat$ be a function s.t. it returns the minimum value amongst the natural numbers from the non-empty multiset given as the input.
-\item  $\ssset = \{\tau(a) | a \in \args$\} be the multiset of social support values of all arguments.
+\item  $\ssset = \{\tau(a, \args) | a \in \args$\} be the multiset of social support values of all arguments.
 \item $\attackers{a} \triangleq \{a_i \in \args: (a_i, a) \in \att\}$ be the set of direct attackers of an argument $a \in \args$, 
 \item$$\SAFOr_{x \in X} x \triangleq\left(\left(\left(  x_{1}\SAFor x_{2}\right) \SAFor...\right)\SAFor x_{n}\right)$$ $X=\left\{  x_{1},x_{2},...,x_{n}\right\}$ denote the aggregation of a multiset of elements of $\valueset$. 
 \end{itemize}
@@ -427,7 +427,7 @@ $d \neq \bot \Rightarrow \rho(d) \neq 0$
 
 \begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation should be limited by the original argument's social support.
 \begin{center}
-$ \rho(d) \leq \tau(a)$
+$ \rho(d) \leq \tau(a, \args)$
 \end{center}
 \end{property}
 
