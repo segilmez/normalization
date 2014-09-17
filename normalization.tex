@@ -235,7 +235,7 @@ Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework. Then, let
 \item $V^{+} (o) \triangleq x$ denote the number of positive votes for object $o$,
 \item $V^{-} (o) \triangleq y$ denote the number of negative votes for object $o$,
 %S \item $v^r: \obj \to \real$ be a function s.t. $v^r(o) \triangleq \frac{x}{x + y}$,
-\item $v^t: \obj \to \nat$ be a function s.t. $v^t(o) \triangleq x + y$,  
+\item $V^t: \obj \to \nat$ be a function s.t. $V^t(o) \triangleq x + y$,  
 \end{itemize}
 whenever $V(o) = (x, y)$,
 \\
@@ -264,7 +264,7 @@ $\tau_{e}:\obj  \times {2}^{\obj} \rightarrow\lbrack0,1]$ is the vote aggregatio
 \begin{array}
 [c]{lll}
 0 &  & V(o) = (0,0)\\
-\frac{V^{+}(o)}{v^{t}(o)+\frac{1}{max(v^{t}(o \cup \mathcal{O}))}} &  & \text{otherwise}%
+\frac{V^{+}(o)}{V^{t}(o)+\frac{1}{max(V^{t}(o \cup \mathcal{O}))}} &  & \text{otherwise}%
 \end{array}
 \right.
 \]
@@ -320,9 +320,9 @@ $\forall o \in \obj$, $\tau (o, \obj) \neq \top$.
 
 
 \subsection{Problem domain}
-We have some dataset $\dataset$ containing the multiset of model evaluation values for a social abstract argumentation framework under product semantics. The values $\forall d \in \dataset$ lay between the interval $[0,1] \in \mathbb{R}$.
+We have some dataset $\dataset$ containing the multiset of model evaluation values for all the arguments of a social abstract argumentation framework with product semantics. The values $\forall d \in \dataset$ lay between the interval $[0,1] \in \mathbb{R}$.
 
-Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\rho: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas until some value close to mean density is reached.
+Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\rho: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas, so that arguments with distinct values can be distinguished better.
 
 The method of remapping may introduce some distortions or biases into the data. However in this case distortions are deliberately introduced in order to better expose the information content. 
 
