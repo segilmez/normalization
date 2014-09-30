@@ -316,13 +316,13 @@ $\forall o \in \obj$, $\tau (o, \obj) \neq \top$.
 %%% SECTION on Normalization
 \section{Normalization of Model Evaluations}
 
-%\item $Y = \{\rho(d) | a \in \dataset\}$
+%\item $Y = \{\sigma(d) | a \in \dataset\}$
 
 
 \subsection{Problem domain}
 We have some dataset $\dataset$ containing the multiset of model evaluation values for all the arguments of a social abstract argumentation framework with product semantics. The values $\forall d \in \dataset$ lay between the interval $[0,1] \in \mathbb{R}$.
 
-Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\rho: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas, so that arguments with distinct values can be distinguished better.
+Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\sigma: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas, so that arguments with distinct values can be distinguished better.
 
 The method of remapping may introduce some distortions or biases into the data. However in this case distortions are deliberately introduced to the system, in order to better expose the information content. 
 
@@ -407,40 +407,40 @@ Undoubtedly I've to study this subject in more detail to find out the optimal ra
 
 \subsection{Characterization of Normalizing Mappings}
 
-The approach we adopt in this section is first defining a list of desirable properties that a normalizing mapping $\rho: \dataset  \rightarrow  [0,1]$ may possess.  
-Then in the next section we will follow my defining some concrete classes of normalizing mappings which contain a subset the properties defined in the current section. This section 
+The approach we adopt in this section is first defining a list of desirable properties that a normalizing mapping $\sigma_X: X  \rightarrow  [0,1]$ may possess, where $X$ is a fixed multiset.  
+Then in the next section we will follow my defining some concrete classes of normalizing mappings which contain a subset the properties defined in the current section.
 
 \vspace{3mm}
-For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\rho: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \real \times \real \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
+For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \real \times \real \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
 
 \begin{property}  [Bottom argument] The argument of a context with the bottom value should not attain any strength in the normalized mutliset.
 \begin{center}
-$d = \bot \Rightarrow \rho(d) = 0$	%$M(a) = \bot \Rightarrow \rho(M(a)) = 0$
+$d = \bot \Rightarrow \sigma_{\dataset}(d) = 0$	%$M(a) = \bot \Rightarrow \sigma(M(a)) = 0$
 \end{center}
 \end{property}
 
 \begin{property}  [Guarantee for the existence of arguments] An argument with some social strength should never be diminished to the value of zero through normalization.
 \begin{center}
-$d \neq \bot \Rightarrow \rho(d) \neq 0$
+$d \neq \bot \Rightarrow \sigma_{\dataset}(d) \neq 0$
 \end{center}
 \end{property}
 
 \begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation should be limited by the original argument's social support.
 \begin{center}
-$ \rho(d) \leq \tau(a, \args)$
+$ \sigma_{\dataset}(d) \leq \tau(a, \args)$
 \end{center}
 \end{property}
 
 \begin{property} [Conservation of relative ordering] The relative order between the pairs of normalized model evaluations should be preserved.
 \begin{center}
- $d_1 > d_2 \Longrightarrow \rho(d_1) > \rho(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
+ $d_1 > d_2 \Longrightarrow \sigma_{\dataset}(d_1) > \sigma_{\dataset}(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
 \end{center}
 \end{property}
 
 \begin{property} [Conservation of distance ordering] The relative order between the distance of pairs of normalized model evaluations should be preserved. 
 \begin{center}
  $\bigtriangleup(d_1, d_2) > \bigtriangleup(d_3, d_4) \Longrightarrow 
-\bigtriangleup(\rho(d_1), \rho(d_2)) > \bigtriangleup(\rho(d_3), \rho(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
+\bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) > \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
 \end{center}
 \end{property}
 
@@ -487,7 +487,7 @@ $min_{separated (p,q)}\bigtriangleup(p,q)$.
 One last discussion before we continue to the last property is $k$, the number of clusters. Some clustering procedures require $k$ to be defined by the user manually, and the rest compute it as the starting step of the procedure. The problem with the family of clustering methods that compute the number of clusters by themselves is that they don't scale well. They have a high time-complexity, in all cases exceeding the cubic time. Thus we may either use a method like Monte Carlo to generate an artificial $k$ and clustering centers then continue with the efficient methods, or use the inefficient but \textit{self-computing} methods initially and then switch to the efficient ones.
 
 
-\begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\rho: \dataset  \rightarrow  [0,1]$ should maximize the spacing over a clustering $\clusterset$ with $k$-clusters.
+\begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ should maximize the spacing over a clustering $\clusterset$ with $k$-clusters.
 \end{property}
 
 
@@ -513,17 +513,17 @@ Here we define some concrete classes of normalizing mappings which all adhere to
 
 The purpose of this section is just to display that different envisioned uses may require functions that satisfy different collections of properties. 
 
-\begin{definition} [Perfect normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 3, 4, 5 and 6.
+\begin{definition} [Perfect normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4, 5 and 6.
 \end{definition}
 
 Property 3 emphasizes the importance of the popular opinion. It carries great significance when defining the formal backbones of the framework. However we may choose to allow the normalized values to go beyond the social support values on the GUI part, with the goal of a more clear display of the argumentation graph. Thus we may choose to not require the particular function to hold for Property 3.
 
-\begin{definition} [GUI-friendly normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 4, 5 and 6.
+\begin{definition} [GUI-friendly normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 4, 5 and 6.
 \end{definition}
 
 Right now we envision that the process of clustering will play a key role in our generic normalization function. On the other hand surely it will increase the time-complexity of the method. Thus perhaps in situations where we're more concerned with the time the algorithm takes, then the precision of the output, we may define the normalization function without taking the clustering property into account.
 
-\begin{definition}[Fast normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\rho: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\rho$ adheres to Properties 1, 2, 3, 4 and 5.
+\begin{definition}[Fast normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4 and 5.
 \end{definition}
 
 %BIZIM PAPER CITATION
