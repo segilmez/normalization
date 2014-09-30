@@ -273,14 +273,15 @@ $\tau_{e}:\obj  \times {2}^{\obj} \rightarrow\lbrack0,1]$ is the vote aggregatio
 \begin{definition}
 [Enhanced Product Semantics]An enhanced product semantic framework is any
 $\mathcal{S}_{e}^{\cdot}=\left\langle [0,1],\tau_{e
-},\curlywedge,\curlyvee,\lnot\right\rangle $ where 1) $x_{1}\curlywedge
-x_{2}=x_{1}\cdot x_{2}$, 2) $x_{1}\curlyvee x_{2}=x_{1}+x_{2}-x_{1}\cdot
+},\curlywedge^{\cdot}, \curlywedge^{\cdot}, \curlyvee^{\cdot},\lnot\right\rangle $ where 1) $x_{1}\curlywedge^{\cdot}
+x_{2}=x_{1}\cdot x_{2}$, 2) $x_{1}\curlyvee^{\cdot} x_{2}=x_{1}+x_{2}-x_{1}\cdot
 x_{2}$, 3) $\lnot x_{1}=1-x_{1}$
 \end{definition}
 
 \begin{conjecture}
 \label{conj:1model}
-Let $\safO$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, $\safid$ has one and only one $\semid_{e}^{.}-model.$
+Let $\safO$ be a social argumentation framework, $\mathcal{S}_{e}^{\cdot}=\left\langle [0,1],\tau_{e
+},\curlywedge^{\cdot}, \curlywedge^{\cdot}, \curlyvee^{\cdot},\lnot\right\rangle$ be a semantic framework. Then, $\safid$ has one and only one $\semid_{e}^{.}-model.$
 
 \end{conjecture}
 
@@ -489,10 +490,6 @@ One last discussion before we continue to the last property is $k$, the number o
 
 \begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ should maximize the spacing over a clustering $\clusterset$ with $k$-clusters.
 \end{property}
-
-
-
-
 
 
 
