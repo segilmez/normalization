@@ -194,7 +194,7 @@ A \emph{social argumentation framework} is a 4-tuple $\safO$, where
   \item $\args$ is the set of arguments,
   \item $\att \subseteq \args \times \args$ is a binary attack relation between arguments,
   \item $\obj = \args \cup \att$ is the set of objects, composed by the union of the sets of arguments and attack relations,
-  \item $V : \obj \to \nat \times \nat$ stores the crowd's pro and con votes for each object.
+  \item $V : \obj \to \nat \times \nat$ is a voting function keeping the crowd's pro and con votes for each object.
 \end{itemize}
 \end{definition}
 
@@ -243,7 +243,7 @@ whenever $V(o) = (x, y)$,
 \item $V^{t}: 2^\obj \to 2^{\nat \times \nat}$ be a function s.t. $V^t(\mathcal{O}^{'}) = \{V^t(o)$ $|$ $o \in \mathcal{O}^{'}\}$,
 \item $max: 2^{\nat} \to \nat$ be a function s.t. it returns the maximum value amongst the natural numbers from the non-empty multiset given as the input.
 \item $min: 2^{\nat} \to \nat$ be a function s.t. it returns the minimum value amongst the natural numbers from the non-empty multiset given as the input.
-\item  $\ssset = \{\tau(a, \args) | a \in \args$\} be the multiset of social support values of all arguments.
+\item  $\ssset \triangleq \{\tau(a, \args) | a \in \args$\} be the multiset of social support values of all arguments.
 \item $\attackers{a} \triangleq \{a_i \in \args: (a_i, a) \in \att\}$ be the set of direct attackers of an argument $a \in \args$, 
 \item$$\SAFOr_{x \in X} x \triangleq\left(\left(\left(  x_{1}\SAFor x_{2}\right) \SAFor...\right)\SAFor x_{n}\right)$$ $X=\left\{  x_{1},x_{2},...,x_{n}\right\}$ denote the aggregation of a multiset of elements of $\valueset$. 
 \end{itemize}
@@ -288,7 +288,7 @@ Let $\safO$ be a social argumentation framework, $\mathcal{S}_{e}^{\cdot}=\left\
 \begin{notation}
 Let $\safO$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, under the assumption that Conjecture \ref{conj:1model} holds, let 
 \begin{itemize}
-\item $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments.
+\item $\dataset \triangleq \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments.
 \end{itemize}
 \end{notation}
 
@@ -323,7 +323,7 @@ $\forall o \in \obj$, $\tau (o, \obj) \neq \top$.
 \subsection{Problem domain}
 We have some dataset $\dataset$ containing the multiset of model evaluation values for all the arguments of a social abstract argumentation framework with product semantics. The values $\forall d \in \dataset$ lay between the interval $[0,1] \in \mathbb{R}$.
 
-Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\sigma: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas, so that arguments with distinct values can be distinguished better.
+Under the aforementioned semantics, the values in our candidate datasets tend to form big clusters, especially close to zero. The main goal of this study is adjusting the original distributions by some mapping $\sigma: \dataset  \rightarrow  [0,1]$, in order to spread high-density areas (increasing the values in most cases), so that arguments with distinct values can be distinguished better.
 
 The method of remapping may introduce some distortions or biases into the data. However in this case distortions are deliberately introduced to the system, in order to better expose the information content. 
 
@@ -352,8 +352,8 @@ In the following subsection you may find the narrative of my gradual thought pro
 \label{def:normSet}  
 Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic variance mapping $Var: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
-\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, when $r_1  \geq r_2$
-\item $r_3 \geq \frac{Var(\dataset)}{Var(\ssset)} \geq r_4$ , when $r_3  \geq r_4$
+\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, where $r_1  \geq r_2$
+\item $r_3 \geq \frac{Var(\dataset)}{Var(\ssset)} \geq r_4$ , where $r_3  \geq r_4$
 \end{itemize}
 \end{definition}
 
@@ -400,9 +400,12 @@ Since variance measures how far a set of numbers is spread out, the relative mea
 
 With these two ratio values, we obtain information on both the relative size of the sub-interval the datapoints are located at and also on the pattern they are spread. 
 
-As you might see in Definition \ref{def:normSet}, I've tried to restrain the envisioned values of the two rations with some constants. Currently I've not been able to set these values yet, and maybe in future we may choose to replace these constants with some other terms. However I believe in order to be able to call a dataset \emph{normalized}, we should aim for both of these ratios to be close to 1. 
+As you might see in Definition \ref{def:normSet}, I've tried to restrain the envisioned values of the two rations with some constants. Currently we've not settled on these values, and maybe in future we may choose to replace these constants with some other terms. 
+%However I believe in order to be able to call a dataset \emph{normalized}, we should aim for both of these ratios to be close to 1. 
 
-Undoubtedly I've to study this subject in more detail to find out the optimal range for these values. I might also uncover more parameters with regards to the notion of normalized sets. 
+One thing that comes to mind is some sort of a supervized learning method. Perhaps we may assume a certain set of datasets as our training set. Then we may parameterize the constants with regards to our training set. That way we may fix the interval for the ratios of ranges and variances. 
+
+Undoubtedly we've to study this subject in more detail to find out the optimal range for these values. We might also uncover more parameters with respect to the notion of normalized sets. 
 
 % We have some control on both the interval and the distribution bla bla
 
@@ -416,13 +419,13 @@ For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew
 
 \begin{property}  [Bottom argument] The argument of a context with the bottom value should not attain any strength in the normalized mutliset.
 \begin{center}
-$d = \bot \Rightarrow \sigma_{\dataset}(d) = 0$	%$M(a) = \bot \Rightarrow \sigma(M(a)) = 0$
+$d = 0 \Rightarrow \sigma_{\dataset}(d) = 0$	%$M(a) = \bot \Rightarrow \sigma(M(a)) = 0$
 \end{center}
 \end{property}
 
 \begin{property}  [Guarantee for the existence of arguments] An argument with some social strength should never be diminished to the value of zero through normalization.
 \begin{center}
-$d \neq \bot \Rightarrow \sigma_{\dataset}(d) \neq 0$
+$d \neq 0 \Rightarrow \sigma_{\dataset}(d) \neq 0$
 \end{center}
 \end{property}
 
@@ -446,7 +449,9 @@ $ \sigma_{\dataset}(d) \leq \tau(a, \args)$
 \end{property}
 
 
-Even all together, these properties still give way to very flexible mapping definitions. We have to define some property based on a concept that could capture the essence of specifically dense areas of the set of model evaluations. In the light of this, we benefit from the study of cluster analysis.
+Even all together, these properties still give way to very flexible mapping definitions. For instance the identity mapping $id: x \mapsto x$ would interestingly satisfy all of the aforementioned properties.
+
+Thus we have to define some property based on a concept that could capture the essence of specifically dense areas of the set of model evaluations. In the light of this, we benefit from the study of cluster analysis.
 
 Very crudely, our objective via utilizing cluster analysis is to identify groups of objects that are very similar with regard to their values. Before going into more detail, firstly we need to formally define what a \textit{cluster} is.  In the literature, there are many definitions with respect to clusters. In our context we will  define them closely to the \textit{partitions} from the classical set theory via updating the definition accordingly with respect to multisets. 
 
@@ -471,7 +476,7 @@ $(C_i, C_j \in \clusterset) \wedge (C_i \neq C_j) \Longrightarrow (C_i \wedge C_
 \end{itemize}
 \end{definition}
 
-As mentioned clustering is the task of grouping a set of objects in such a way that objects in the same cluster are more similar (in some sense or another) to each other than to those in other cluster. So we should also define the concept of \textit{similarity} in a formal manner. Different procedures adopt different similarity functions  $\bigtriangleup: \real \times \real \rightarrow \real$ when grouping the most similar objects into clusters. We have a single clustering variable, the model evaluation of arguments. Thus using the generic distance function as the similarity measure is a possibility. 
+As mentioned clustering is the task of grouping a set of objects in such a way that objects in the same cluster are more similar (in some sense or another) to each other than to those in other cluster. So we should also define the concept of \textit{similarity} in a formal manner. Different procedures adopt different metrics, $\bigtriangleup: S \times S \rightarrow \real$ where $S$ is some set of valuations, when grouping the most similar objects into clusters. We have a single clustering variable, the model evaluation of arguments. Thus using the generic distance function as the similarity measure is a possibility. 
 
 We continue by stating two more preliminary definitions that we will utilize in our last property. 
 
@@ -480,15 +485,19 @@ We continue by stating two more preliminary definitions that we will utilize in 
 Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ when $i \neq j$. 
 \end{definition}
 
+\begin{notation} 
+Let $separated(p,q)$ be the shortcut of notation where $p$ and $q$ are two separated points from some clustering $\clusterset$.
+\end{notation}
+
 \begin{definition} [Spacing] 
-The spacing of a clustering $\clusterset$ is the distance between the closest together pair of separated points,
+Given a metric $\bigtriangleup$, the spacing of a clustering $\clusterset$ is the minimum distance between any two separated points,
 $min_{separated (p,q)}\bigtriangleup(p,q)$.
 \end{definition}
 
 One last discussion before we continue to the last property is $k$, the number of clusters. Some clustering procedures require $k$ to be defined by the user manually, and the rest compute it as the starting step of the procedure. The problem with the family of clustering methods that compute the number of clusters by themselves is that they don't scale well. They have a high time-complexity, in all cases exceeding the cubic time. Thus we may either use a method like Monte Carlo to generate an artificial $k$ and clustering centers then continue with the efficient methods, or use the inefficient but \textit{self-computing} methods initially and then switch to the efficient ones.
 
 
-\begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ should maximize the spacing over a clustering $\clusterset$ with $k$-clusters.
+\begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$  maximizes the spacing over a clustering $\clusterset$ with $k$-clusters.
 \end{property}
 
 
