@@ -417,31 +417,31 @@ Then in the next section we will follow my defining some concrete classes of nor
 \vspace{3mm}
 For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \real \times \real \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
 
-\begin{property}  [Bottom argument] The argument of a context with the bottom value should not attain any strength in the normalized mutliset.
+\begin{property}  [Bottom argument] The argument of a context with the bottom value does not attain any strength in the normalized mutliset.
 \begin{center}
 $d = 0 \Rightarrow \sigma_{\dataset}(d) = 0$	%$M(a) = \bot \Rightarrow \sigma(M(a)) = 0$
 \end{center}
 \end{property}
 
-\begin{property}  [Guarantee for the existence of arguments] An argument with some social strength should never be diminished to the value of zero through normalization.
+\begin{property}  [Guarantee for the existence of arguments] An argument with some social strength is never diminished to the value of zero through normalization.
 \begin{center}
 $d \neq 0 \Rightarrow \sigma_{\dataset}(d) \neq 0$
 \end{center}
 \end{property}
 
-\begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation should be limited by the original argument's social support.
+\begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation is limited by the original argument's social support.
 \begin{center}
 $ \sigma_{\dataset}(d) \leq \tau(a, \args)$
 \end{center}
 \end{property}
 
-\begin{property} [Conservation of relative ordering] The relative order between the pairs of normalized model evaluations should be preserved.
+\begin{property} [Conservation of relative ordering] The relative order between the pairs of normalized model evaluations is preserved.
 \begin{center}
  $d_1 > d_2 \Longrightarrow \sigma_{\dataset}(d_1) > \sigma_{\dataset}(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
 \end{center}
 \end{property}
 
-\begin{property} [Conservation of distance ordering] The relative order between the distance of pairs of normalized model evaluations should be preserved. 
+\begin{property} [Conservation of distance ordering] The relative order between the distance of pairs of normalized model evaluations is preserved. 
 \begin{center}
  $\bigtriangleup(d_1, d_2) > \bigtriangleup(d_3, d_4) \Longrightarrow 
 \bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) > \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
