@@ -412,7 +412,12 @@ Undoubtedly we've to study this subject in more detail to find out the optimal r
 \subsection{Characterization of Normalizing Mappings}
 
 The approach we adopt in this section is first defining a list of desirable properties that a normalizing mapping $\sigma_X: X  \rightarrow  [0,1]$ may possess, where $X$ is a fixed multiset.  
-Then in the next section we will follow my defining some concrete classes of normalizing mappings which contain a subset the properties defined in the current section.
+Then in the next section we will follow by defining some concrete classes of normalizing mappings which contain a subset the properties defined in the current section.
+
+Before we move on, here we may better take a small pause to discuss the structure of the normalizing mapping. The mapping of each datapoint to a value in the unit interval is carried out with respect to the whole dataset. So the information that the dataset if fixed should be included in the mapping symbol. Indeed, that's what the subscript in the function definition above stands for. 
+
+For example, assume two sets $A = \{1, 3 ,5, 7\}$ and $B = \{5, 50, 500, 5000\}$. Undoubtedly it would follow as $\sigma_A(5) \neq \sigma_B(5)$.
+
 
 \vspace{3mm}
 For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
