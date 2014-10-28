@@ -516,12 +516,12 @@ Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusters
 \end{definition}
 
 \begin{notation} 
-Let $separated(p,q)$ be the shortcut of notation where $p$ and $q$ are two separated points from some clustering $\clusterset$.
+Let $Separated(p,q)$ be the shortcut of notation where $p$ and $q$ are two separated points from some clustering $\clusterset$.
 \end{notation}
 
 \begin{definition} [Spacing] 
 Given a metric $\bigtriangleup$, the spacing of a clustering $\clusterset$ is the minimum distance between any two separated points,
-$min_{separated (p,q)}\bigtriangleup(p,q)$.
+$min_{Separated (p,q)}\bigtriangleup(p,q)$.
 \end{definition}
 
 One last discussion before we continue to the last property is $k$, the number of clusters. Some clustering procedures require $k$ to be defined by the user manually, and the rest compute it as the starting step of the procedure. The problem with the family of clustering methods that compute the number of clusters by themselves is that they don't scale well. They have a high time-complexity, in all cases exceeding the cubic time. Thus we may either use a method like Monte Carlo to generate an artificial $k$ and clustering centers then continue with the efficient methods, or use the inefficient but \textit{self-computing} methods initially and then switch to the efficient ones.
