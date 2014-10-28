@@ -338,10 +338,10 @@ At this point, two values that I believe to be relevant are:
 \begin{center}
  $\frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)}$
 \end{center}
-\item The ratio between the variance of the model evaluations and the variance of the social support values
+\item The ratio between the standard deviation of the model evaluations and the standard deviation of the social support values
 
 \begin{center}
-$\frac{Var(\dataset)}{Var(\ssset)}$
+$\frac{\sigma(\dataset)}{\sigma(\ssset)}$
 \end{center}
 \end{itemize}
 
@@ -350,10 +350,10 @@ In the following subsection you may find the narrative of the thought process be
 
 \begin{definition} [Normalized dataset]
 \label{def:normSet}  
-Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic variance mapping $Var: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
+Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
 \item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, where $r_1  \geq r_2$
-\item $r_3 \geq \frac{Var(\dataset)}{Var(\ssset)} \geq r_4$ , where $r_3  \geq r_4$
+\item $r_3 \geq \frac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_4$ , where $r_3  \geq r_4$
 \end{itemize}
 \end{definition}
 
@@ -396,14 +396,39 @@ Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, 
 
 Now with addition of a single argument and attack relation we have $M(a_4) = M(a_2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
 
-Since variance measures how far a set of numbers is spread out, the relative measure of the two multisets' variances, $\frac{Var(\dataset)}{Var(\ssset)}$ may overcome the shortcoming of only taking ranges into consideration. 
+Since standard deviation measures how far a set of numbers is spread out, the relative measure of the two multisets' standard deviations, $\frac{\sigma(\dataset)}{\sigma(\ssset)}$ may overcome the shortcoming of only taking ranges into consideration. 
 
 With these two ratio values, we obtain information on both the relative size of the sub-interval the datapoints are located at and also on the pattern they are spread. 
 
-As you might see in Definition \ref{def:normSet}, I've tried to restrain the envisioned values of the two rations with some constants. Currently we've not settled on these values, and maybe in future we may choose to replace these constants with some other terms. 
+As you might see in Definition \ref{def:normSet}, we've tried to restrain the envisioned values of the two rations with some constants. Currently we've not settled on these values, and maybe in future we may choose to replace these constants with some other terms. 
 %However I believe in order to be able to call a dataset \emph{normalized}, we should aim for both of these ratios to be close to 1. 
 
-One thing that comes to mind is some sort of a supervized learning method. Perhaps we may assume a certain set of datasets as our training set. Then we may parameterize the constants with regards to our training set. That way we may fix the interval for the ratios of ranges and variances. 
+One thing that comes to mind is some sort of a supervized learning method. Perhaps we may assume a certain set of datasets as our training set. Then we may parameterize the constants with regards to our training set. That way we may fix the interval for the ratios of ranges and standard deviations. 
+
+Let us see one example on this notion to make it more clear. For simplicity, we will only consider the standard deviation of the model evaluations when we are talking about the characterization of normalized sets. 
+
+\begin{example}
+Assume we have the following three datasets that are known to be normalized:
+\begin{itemize}
+\item $D_1 = \{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1\}$
+\item $D_2 = \{0.05, 0.1, 0.3, 0.45, 0.75, 0.8, 0.9, 0.95\}$
+\item $D_3 = \{0.25, 0.35, 0.4, 0.5, 0.6, 0.7, 0.75\}$
+\end{itemize}
+And we would like to figure out whether the following two data sets are normalized or not with respect to the training set.
+ \begin{itemize}
+\item $D_4 = \{0.05, 0.1, 0.1, 0.15, 0.2, 0.2, 0.85, 0.9, 0.95\}$
+\item $D_5 = \{0.25, 0.3, 0.4, 0.6, 0.75, 0.9, 0.9\}$
+\end{itemize}
+
+Then the standard deviations for the training set follow as: $\sigma_1\cong 0.287, \sigma_2\cong 0.337, \sigma_3\cong 0.172$. 
+
+Thus we may conclude that for a dataset $D_i$, the corresponding standard deviation value should fall into the interval $0.172 \leq \sigma_i \leq 0.337$ for $D_i$ to be regarded as normalized.
+
+The standard deviations for the test set follow as: $\sigma_4\cong 0.364, \sigma_5\cong 0.254$.
+
+Consequently we may determine that $D_5$ is a normalized dataset, on the other hand $D_4$ is not.
+
+\end{example}
 
 Undoubtedly we've to study this subject in more detail to find out the optimal range for these values. We might also uncover more parameters with respect to the notion of normalized sets. 
 
