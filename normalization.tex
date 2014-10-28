@@ -350,10 +350,10 @@ In the following subsection you may find the narrative of the thought process be
 
 \begin{definition} [Normalized dataset]
 \label{def:normSet}  
-Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
+Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$ where $r_1  \geq r_2$ and $r_3  \geq r_4$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
-\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, where $r_1  \geq r_2$
-\item $r_3 \geq \frac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_4$ , where $r_3  \geq r_4$
+\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, 
+\item $r_3 \geq \frac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_4$.
 \end{itemize}
 \end{definition}
 
