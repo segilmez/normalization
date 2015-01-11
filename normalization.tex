@@ -16,10 +16,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Algorithms and pseudo code
-\usepackage{verbatim}
-\usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage{algpseudocode}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+
+%\usepackage{verbatim}
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
 
 % Graphics and display
 \usepackage{float}
@@ -111,7 +113,8 @@
 \newcommand{\safset}{\mathcal{F}}    % Set of all SAFs
 
 \newcommand{\saf}{\safid = \safbody} % Framework id and respective tuple
-\newcommand{\safbody}{\langle \args, \att, \varg, \vatt \rangle} % SAF tuple
+%\newcommand{\safbody}{\langle \args, \att, \varg, \vatt \rangle} % SAF tuple
+\newcommand{\safbody}{\langle \args, \att, V \rangle} % SAF tuple
 \newcommand{\oldsaf}{\safid = \oldsafbody} % Ex Framework id and respective tuple
 \newcommand{\oldsafbody}{\langle \args, \att, V \rangle} % old SAF tuple
 % Alternative framework, same as \safbody but with ' everywhere ;)
@@ -189,26 +192,26 @@
 
 
 \begin{definition}[Social argumentation frameworks]
-A \emph{social argumentation framework} is a 4-tuple $\safO$, where
+A \emph{social argumentation framework} is a 3-tuple $\saf$, where
 \begin{itemize}
   \item $\args$ is the set of arguments,
   \item $\att \subseteq \args \times \args$ is a binary attack relation between arguments,
-  \item $\obj = \args \cup \att$ is the set of objects, composed by the union of the sets of arguments and attack relations,
-  \item $V : \obj \to \nat \times \nat$ is a voting function keeping the crowd's pro and con votes for each object.
+  %\item $\obj = \args \cup \att$ is the set of objects, composed by the union of the sets of arguments and attack relations,
+  \item $V : \args \cup \att \to \nat \times \nat$ is a voting function keeping the crowd's pro and con votes for each argument and attack relation.
 \end{itemize}
 \end{definition}
 
 \begin{definition}[Vote Aggregation Function]
 \label{def:voteAgg}
 
-Given a totally ordered set $\valueset$ with top and bottom elements $\top$, $\bot$, a voting function $V$ and a set of objects $\obj$, a vote aggregation function $\tau$ is any function such that $\tau: \obj  \times {2}^{\obj} \to L$.
+Given a totally ordered set $\valueset$ with top and bottom elements $\top$, $\bot$, and a framework $\saf$, $\tau$ is any function such that $\tau:  (\args \cup \att)  \times {2}^{ (\args \cup \att)} \to L$.
 \end{definition}
 
 
 
 \begin{definition}[Semantic Framework]
 \label{def:semfram}
-A semantic framework is a 6-tuple \\$\sembodyNew$ where:
+A semantic framework is a 6-tuple $\sem=\sembody$ where:
 
 \begin{itemize}
   \item $\valueset$ is a totally ordered set with top and bottom elements $\top$, 
@@ -228,8 +231,9 @@ $\bot$, containing all possible valuations of an argument.
 \end{definition}
 
 \begin{notation}
-Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework. Then, let
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework. Then, let
 \begin{itemize}
+ \item $\obj = \args \cup \att$ be the set of objects, composed by the union of the sets of arguments and attack relations,
 \item
 \begin{itemize}
 \item $V^{+} (o) \triangleq x$ denote the number of positive votes for object $o$,
@@ -243,7 +247,7 @@ whenever $V(o) = (x, y)$,
 \item $V^{t}: 2^\obj \to 2^{\nat \times \nat}$ be a function s.t. $V^t(\mathcal{O}^{'}) = \{V^t(o)$ $|$ $o \in \mathcal{O}^{'}\}$,
 \item $max: 2^{\nat} \to \nat$ be a function s.t. it returns the maximum value amongst the natural numbers from the non-empty multiset given as the input.
 \item $min: 2^{\nat} \to \nat$ be a function s.t. it returns the minimum value amongst the natural numbers from the non-empty multiset given as the input.
-\item  $\ssset \triangleq \{\tau(a, \args) | a \in \args$\} be the multiset of social support values of all arguments.
+\item  $\tau:2^{\obj} \to 2^{L}$ be a function s.t. $\tau(A) = \{\tau(a)|a\in A\}$.%$\ssset \triangleq \{\tau(a, \args) | a \in \args$\} be the multiset of social support values of all arguments.
 \item $\attackers{a} \triangleq \{a_i \in \args: (a_i, a) \in \att\}$ be the set of direct attackers of an argument $a \in \args$, 
 \item$$\SAFOr_{x \in X} x \triangleq\left(\left(\left(  x_{1}\SAFor x_{2}\right) \SAFor...\right)\SAFor x_{n}\right)$$ $X=\left\{  x_{1},x_{2},...,x_{n}\right\}$ denote the aggregation of a multiset of elements of $\valueset$. 
 \end{itemize}
@@ -251,13 +255,13 @@ whenever $V(o) = (x, y)$,
 
 \begin{definition}[Model] 
 \label{def:model}
-  Let $\safO$ be a social argumentation framework, $\sem = \sembodyNew$ be a semantic framework. An $\semid$-model of $\safid$ is a total mapping $M : \args \rightarrow \valueset$ such that for all $a \in \args$,
+  Let $\saf$ be a social argumentation framework, $\sem = \sembodyNew$ be a semantic framework. An $\semid$-model of $\safid$ is a total mapping $M : \args \rightarrow \valueset$ such that for all $a \in \args$,
   $$\displaystyle M(a) = \tau(a, \args ) \SAFand_\args \lnot \SAFOr_{a_i \in \attackers{a}} \left(\tau\left((a_i, a), \att \right) \SAFand_\att M\left(a_i\right)\right)$$
 \end{definition}
 
 \begin{definition}[Enhanced Vote Aggregation]
 \label{def:enhVoteAgg}
-Given a voting function $V$ and a set of objects $\obj$, enhanced vote aggregation function
+Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$, enhanced vote aggregation function
 $\tau_{e}:\obj  \times {2}^{\obj} \rightarrow\lbrack0,1]$ is the vote aggregation function such that
 \[
 \tau_{e}  (o, \mathcal{O})  = \left\{
@@ -280,13 +284,13 @@ x_{2}$, 3) $\lnot x_{1}=1-x_{1}$
 
 \begin{conjecture}
 \label{conj:1model}
-Let $\safO$ be a social argumentation framework, $\mathcal{S}_{e}^{\cdot}=\left\langle [0,1],\tau_{e
+Let $\saf$ be a social argumentation framework, $\mathcal{S}_{e}^{\cdot}=\left\langle [0,1],\tau_{e
 },\curlywedge^{\cdot}, \curlywedge^{\cdot}, \curlyvee^{\cdot},\lnot\right\rangle$ be a semantic framework. Then, $\safid$ has one and only one $\semid_{e}^{.}-model.$
 
 \end{conjecture}
 
 \begin{notation}
-Let $\safO$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, under the assumption that Conjecture \ref{conj:1model} holds, let 
+Let $\saf$ be a social argumentation framework, $\sem = \sembodyNewE$ be a semantic framework. Then, under the assumption that Conjecture \ref{conj:1model} holds, let 
 \begin{itemize}
 \item $\dataset \triangleq \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments.
 \end{itemize}
@@ -350,7 +354,7 @@ In the following subsection you may find the narrative of the thought process be
 
 \begin{definition} [Normalized dataset]
 \label{def:normSet}  
-Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$ where $r_1  \geq r_2$ and $r_3  \geq r_4$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
+Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$ where $r_1  \geq r_2$ and $r_3  \geq r_4$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
 \item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, 
 \item $r_3 \geq \frac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_4$.
@@ -360,7 +364,7 @@ Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$, the generic s
 %%PROPERTY ORNEGI%%
 \begin{comment}
 \begin{example}
-Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att =\{\}.$
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att =\{\}.$
 \end{example}
 \end{comment}
 %%%%%%%%%%%%%
@@ -370,7 +374,7 @@ Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, 
 Our initial suspicion was that whenever all model evaluations are very close to zero, this problem originates because the argumentation graph is strongly connected and this collection of datapoints $\dataset$ needs normalization. However consider the following setting:
 
 \begin{example}
-Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \emptyset.$
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \emptyset.$
 \end{example}
 
 In addition assume that all the social support values are extremely low. Since the attack set is empty, the model evaluation values for the arguments will be equal their social support values. So here the structure of the graph is not to blame. The model evaluations are low because of the popular opinion and thus probably the dataset should be left this way, it should not be normalized.
@@ -383,7 +387,7 @@ At this point I thought comparing the ranges of the social support values and th
 However it appears that considering the ranges by itself is not sufficient as well. To see this, consider the following example:
 
 \begin{example}
-Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1)\}.$
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1)\}.$
 \end{example}
 
 Assume all the arguments are at full strength. Then under product semantics the model evaluations would follow as $M(a_1) = M(a_2) = M(a_3) \simeq 0.33$.
@@ -391,10 +395,10 @@ Assume all the arguments are at full strength. Then under product semantics the 
 Now let's add another argument to the system (also with perfect social support) that only attacks to the first argument:
 
 \begin{example}
-Let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3, a_4\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1), (a_4,a_1)\}.$
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3, a_4\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1), (a_4,a_1)\}.$
 \end{example}
 
-Now with addition of a single argument and attack relation we have $M(a_4) = M(a_2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
+Now with addition of a single argument and attack relation we have $M(a_4) = M(ac c _2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
 
 Since standard deviation measures how far a set of numbers is spread out, the relative measure of the two multisets' standard deviations, $\frac{\sigma(\dataset)}{\sigma(\ssset)}$ may overcome the shortcoming of only taking ranges into consideration. 
 
@@ -445,7 +449,7 @@ For example, assume two sets $A = \{1, 3 ,5, 7\}$ and $B = \{5, 50, 500, 5000\}$
 
 
 \vspace{3mm}
-For the upcoming property definitions, let $\safO$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
+For the upcoming property definitions, let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
 
 \begin{property}  [Bottom argument] The argument of a context with the bottom value does not attain any strength in the normalized mutliset.
 \begin{center}
@@ -520,8 +524,11 @@ Let $Separated(p,q)$ be the shortcut of notation where $p$ and $q$ are two separ
 \end{notation}
 
 \begin{definition} [Spacing] 
-Given a metric $\bigtriangleup$, the spacing of a clustering $\clusterset$ is the minimum distance between any two separated points,
-$min_{Separated (p,q)}\bigtriangleup(p,q)$.
+Given a metric $\bigtriangleup$, the spacing of a clustering $\clusterset$ is the minimum distance between any two separated points:
+
+$\bigtriangleup(X, Y) = min_{x\in X, y\in Y} \bigtriangleup(x,y)    $	% $min_{Separated (p,q)}\bigtriangleup(p,q)$.
+where X and Y are any two distinct clusters, and d(x,y) denotes the distance between the two elements x and y.
+
 \end{definition}
 
 One last discussion before we continue to the last property is $k$, the number of clusters. Some clustering procedures require $k$ to be defined by the user manually, and the rest compute it as the starting step of the procedure. The problem with the family of clustering methods that compute the number of clusters by themselves is that they don't scale well. They have a high time-complexity, in all cases exceeding the cubic time. Thus we may either use a method like Monte Carlo to generate an artificial $k$ and clustering centers then continue with the efficient methods, or use the inefficient but \textit{self-computing} methods initially and then switch to the efficient ones.
@@ -531,16 +538,89 @@ One last discussion before we continue to the last property is $k$, the number o
 \end{property}
 
 
-
-
-%Our first goal is characterizing the \emph{normalized data} within a context through defining a set of desirable properties. 
-
 %\hspace{20mm}
 
+\subsection{The Algorithm of a Concrete Normalizing Mapping}
+
+
+\begin{algorithm}
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\caption{A Clustering Based Normalizing Algorithm}
+\Input{$\dataset$ (instances set), k (\# of clusters))}
+\Output{$\dataset$ (normalized instances set)}
+\BlankLine
+$cluster\_counter = 0$\;
+Clusters $\leftarrow\emptyset$\;
+\ForEach{$d_i \in \dataset$}{
+$newCluster \leftarrow \{d_i\}$\;
+$instance\_counter(newCluster) = 1$\;
+$Clusters \leftarrow Clusters \cup newCluster$\;
+$cluster\_counter++$\;
+}
+\ForEach{$C_i, C_j \in Clusters$}{
+$Compute$ $\bigtriangleup(C_i, C_j)$
+}
+\While{$cluster\_counter \neq k$}{
+$cluster\_counter--$\;
+$(C_m, C_n) = $ two clusters closest together in $Clusters$
+}
+
+
+\label{algo_norm}
+\end{algorithm}
+
+\begin{theorem}
+The algorithm satisfies properties...
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+
+\begin{comment}
+\emph{special treatment of the first line}\;
+\For{$i\leftarrow 2$ \KwTo $l$}{
+\emph{special treatment of the first element of line $i$}\;
+\For{$j\leftarrow 2$ \KwTo $w$}{\nllabel{forins}
+\Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
+\Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
+\This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
+\If{\Left compatible with \This}{
+\lIf{\Left $<$ \This}{\Union{\Left,\This}}\;
+\lElse{\Union{\This,\Left}}
+}
+\If{\Up compatible with \This}{
+\lIf{\Up $<$ \This}{\Union{\Up,\This}}\;
+\lElse{\Union{\This,\Up}}
+}
+}
+\lForEach{element $e$ of the line $i$}{
+\FindCompress{p}
+}
+}
+
+\end{comment}
 
 
 
 
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment} %sut'un begenmedigi bolum
 
 \subsection{Classes of Normalizing Mappings}
 %SLOTA'dan bak
@@ -549,18 +629,20 @@ Here we define some concrete classes of normalizing mappings which all adhere to
 
 The purpose of this section is just to display that different envisioned uses may require functions that satisfy different collections of properties. 
 
-\begin{definition} [Perfect normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4, 5 and 6.
+\begin{definition} [Perfect normalizing mapping] Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4, 5 and 6.
 \end{definition}
 
 Property 3 emphasizes the importance of the popular opinion. It carries great significance when defining the formal backbones of the framework. However we may choose to allow the normalized values to go beyond the social support values on the GUI part, with the goal of a more clear display of the argumentation graph. Thus we may choose to not require the particular function to hold for Property 3.
 
-\begin{definition} [GUI-friendly normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 4, 5 and 6.
+\begin{definition} [GUI-friendly normalizing mapping] Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 4, 5 and 6.
 \end{definition}
 
 Right now we envision that the process of clustering will play a key role in our generic normalization function. On the other hand surely it will increase the time-complexity of the method. Thus perhaps in situations where we're more concerned with the time the algorithm takes, then the precision of the output, we may define the normalization function without taking the clustering property into account.
 
-\begin{definition}[Fast normalizing mapping] Given a SAF $\safO$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4 and 5.
+\begin{definition}[Fast normalizing mapping] Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$,  an injective mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ is a perfect normalizing mapping if $\sigma$ adheres to Properties 1, 2, 3, 4 and 5.
 \end{definition}
+
+\end{comment}
 
 %BIZIM PAPER CITATION
 %\cite{eml2013esaf}
