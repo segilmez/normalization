@@ -540,8 +540,9 @@ One last discussion before we continue to the last property is $k$, the number o
 
 %\hspace{20mm}
 
-\subsection{The Algorithm of a Concrete Normalizing Mapping}
+\subsection{Algorithms for Concrete Normalizing Mapping}
 
+\subsubsection{Single-linked normalization}
 
 \begin{algorithm}
 \SetKwData{Left}{left}
@@ -552,7 +553,7 @@ One last discussion before we continue to the last property is $k$, the number o
 \SetKwInOut{Input}{input}
 \SetKwInOut{Output}{output}
 
-\caption{A Clustering Based Normalizing Algorithm}
+\caption{Single Linked Normalizing Algorithm}
 \Input{$\dataset$ (instances set), k (\# of clusters))}
 \Output{$\dataset$ (normalized instances set)}
 \BlankLine
@@ -566,10 +567,14 @@ $cluster\_counter++$\;
 }
 \ForEach{$C_i, C_j \in Clusters$}{
 $Compute$ $\bigtriangleup(C_i, C_j)$
-}
+}   
 \While{$cluster\_counter \neq k$}{
+$(C_m, C_n) = $ two clusters closest together in $Clusters$\;
+$Clusters \leftarrow Clusters -\{C_m\}-\{C_n\}\cup\{C_m\cup C_n\}$\;
 $cluster\_counter--$\;
-$(C_m, C_n) = $ two clusters closest together in $Clusters$
+\ForEach{$C \in Clusters$}{
+$Compute$ $\bigtriangleup(C, (C_m\cup C_n))$
+}
 }
 
 
@@ -615,7 +620,11 @@ The algorithm satisfies properties...
 
 
 
+\subsection{Discussion}
 
+COMPARISON OF ALGORITHMS AND GENERAL REMARKS
+
+...the merit of the first algorithm is easily displayed via property 6. for the other two, the properties that they adhere to constitute a rather flexible class of mappings. so perhaps the merit of these algorithms is not so easily seen. however they create a better valuation for the data. "better how", this should be captured by some property or parameter that can be measured. 
 
 
 
