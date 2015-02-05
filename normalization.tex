@@ -333,6 +333,8 @@ The method of remapping may introduce some distortions or biases into the data. 
 
 \subsubsection{Characterization of Normalized Sets}
 
+--Whole section Under Revision--
+
 In this section we try to find out the parameters that define whether a dataset is \textit{normalized} or not. However the findings are at a preliminary level.
 
 At this point, two values that I believe to be relevant are:
@@ -354,10 +356,10 @@ In the following subsection you may find the narrative of the thought process be
 
 \begin{definition} [Normalized dataset]
 \label{def:normSet}  
-Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$ and constants $r_1,  r_2, r_3, r_4 \in \real^+$ where $r_1  \geq r_2$ and $r_3  \geq r_4$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
+Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$, the generic mean function $\mu: 2^{\nat} \rightarrow \nat$  and constants $r_1,  r_2 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
-\item $r_1 \geq \frac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_2$, 
-\item $r_3 \geq \frac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_4$.
+\item $r_1 - \frac{\mu(D)}{\mu(T)} \geq \dfrac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_1 + \frac{\mu(D)}{\mu(T)}$, 
+\item   $r_2 - \frac{\mu(D)}{\mu(T)} \geq \dfrac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_2 + \frac{\mu(D)}{\mu(T)}$.
 \end{itemize}
 \end{definition}
 
@@ -398,7 +400,7 @@ Now let's add another argument to the system (also with perfect social support) 
 Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\args =\{a_1, a_2, a_3, a_4\}$ and $\att = \{(a_1,a_2), (a_2,a_3), (a_3,a_1), (a_4,a_1)\}.$
 \end{example}
 
-Now with addition of a single argument and attack relation we have $M(a_4) = M(ac c _2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
+Now with the addition of a single argument and attack relation we have $M(a_4) = M(a_2) =  1$ and $M(a_1) = M(a_3) =  0$. The range of the social supports is the same, since all of them are at the same value. However the range of the model evaluations increased from a minimum of 0 to a maximum of 1. So on top of the comparison of ranges, we need some additional concept that would capture the essence of the distribution i.e. how datapoints are spread in the interval.
 
 Since standard deviation measures how far a set of numbers is spread out, the relative measure of the two multisets' standard deviations, $\frac{\sigma(\dataset)}{\sigma(\ssset)}$ may overcome the shortcoming of only taking ranges into consideration. 
 
@@ -463,22 +465,33 @@ $d \neq 0 \Rightarrow \sigma_{\dataset}(d) \neq 0$
 \end{center}
 \end{property}
 
+
+\begin{comment} % TAKEN OUT - no assumption regarding the knowledge of \tau values exists in the current version
 \begin{property}  [Decisiveness of Popular Opinion] Normalized value of a model evaluation is limited by the original argument's social support.
 \begin{center}
 $ \sigma_{\dataset}(d) \leq \tau(a, \args)$
 \end{center}
 \end{property}
+\end{comment}
+
+
+\begin{property} [Non-decreasing affect of normalization] Normalized value of a model evaluation should be bigger or equal the original value (in order to prevent the values cramming into a small space close to zero).
+\begin{center}
+$ d \leq\sigma_{\dataset}(d)$
+\end{center}
+\end{property}
 
 \begin{property} [Conservation of relative ordering] The relative order between the pairs of normalized model evaluations is preserved.
 \begin{center}
- $d_1 > d_2 \Longrightarrow \sigma_{\dataset}(d_1) > \sigma_{\dataset}(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
+ $d_1 \geq d_2 \Longrightarrow \sigma_{\dataset}(d_1) \geq \sigma_{\dataset}(d_2)$\\%,  $d_1, d_2 \in \dataset$, \\
 \end{center}
 \end{property}
 
 \begin{property} [Conservation of distance ordering] The relative order between the distance of pairs of normalized model evaluations is preserved. 
+\label{prop:ConDis}
 \begin{center}
- $\bigtriangleup(d_1, d_2) > \bigtriangleup(d_3, d_4) \Longrightarrow 
-\bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) > \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
+ $\bigtriangleup(d_1, d_2) \geq \bigtriangleup(d_3, d_4) \Longrightarrow 
+\bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) \geq \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\%,  $d_1, d_2 \in \dataset$, \\
 \end{center}
 \end{property}
 
@@ -537,12 +550,34 @@ One last discussion before we continue to the last property is $k$, the number o
 \begin{property} [Max spacing over k-clustering]  Given constant $k \in \nat$, a normalizing function $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$  maximizes the spacing over a clustering $\clusterset$ with $k$-clusters.
 \end{property}
 
+... Property \ref{prop:ConDis} cannot be satisfied by any methodology in some cases (i.e. set of model evaluations include 0 and 1) together with some other properties. But with the introduction of the clustering related concepts, we define a relaxed version of the property by limiting the restriction within clusters.
+
+\begin{property} [Conservation of distance ordering within clusters] Given a clustering $\clusterset$, the relative order between the distance of pairs of normalized model evaluations is preserved within each cluster $C \in \clusterset$. 
+\label{prop:ConDis}
+\begin{center}
+ $\bigtriangleup(d_1, d_2) \geq \bigtriangleup(d_3, d_4) \Longrightarrow 
+\bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) \geq \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\
+%,  $d_1, d_2 \in \dataset$, \\
+where $d_1, d_2, d_3, d_4 \in C$
+\end{center}
+\end{property}
+
 
 %\hspace{20mm}
 
 \subsection{Algorithms for Concrete Normalizing Mapping}
 
+\footnote{In the algorithms the list data structure is utilized instead of sets. I haven't been able to find any reliable source indicating the standard pseudocode representation of lists. I've encountered two examples where they were written with set representation and that's what I have done in this document as well.}
+
+...The premise here is that from Cantor's first uncountability proof, we know that the set of all real number is uncountably infinite. Thus for two arbitrary reel numbers, there is some other reel number whose value falls between those two. In the light of this...
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Single-linked normalization}
+
+...Here we had the assumption that K is given as an input to the algorithm. Alternatively, it is possible to modify the algorithm to iterate till a certain threshold of average distance amongst all the clusters is reached. 
+
 
 \begin{algorithm}
 \SetKwData{Left}{left}
@@ -573,23 +608,25 @@ $(C_m, C_n) = $ two clusters closest together in $Clusters$\;
 $Clusters \leftarrow Clusters -\{C_m\}-\{C_n\}\cup\{C_m\cup C_n\}$\;
 $cluster\_counter--$\;
 \ForEach{$C \in Clusters$}{
-$Compute$ $\bigtriangleup(C, (C_m\cup C_n))$
+$Compute$ $\bigtriangleup(C, (C_m\cup C_n))$\;
+}
+}
+Mid $\leftarrow\emptyset$\;
+\ForEach{$C_i, C_{i+1} \in Clusters$}{
+$Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
+}   
+\ForEach{$C_i \in Clusters$}{
+\ForEach{$d \in C_i$}{
+$d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
 }
 }
 
 
-\label{algo_norm}
+\label{algo_singLink}
 \end{algorithm}
 
-\begin{theorem}
-The algorithm satisfies properties...
-\end{theorem}
 
-\begin{proof}
-
-\end{proof}
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
 \emph{special treatment of the first line}\;
 \For{$i\leftarrow 2$ \KwTo $l$}{
@@ -613,18 +650,310 @@ The algorithm satisfies properties...
 }
 
 \end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+... the segment of the algorithm which contain the normalization routine within clusters is between lines 20 and 28. The objective function can be simply represented as:
+
+\begin{center}
+$f(x) = \dfrac{x-min(C_i)}{max(C_i)-min(C_i)} (Mid[i]-min(C_i)) +min(C_i) = \dfrac{x-a}{b-a} (c-a) + a$
+\end{center}
+
+where $x$ is the datapoint that goes under normalization, $min(C_i)$\emph{(=a)} and $max(C_i)$\emph{(=b)} are the minumum and maximum elements(respectively) of the cluster $C_i$ that $x$ belongs to, $Mid[i]$\emph{(=c)} is the middle point amongst cluster $C_i$ and $C_{i+1}$.
+
+For the upcoming proofs, except Proposition 5 (regarding Property 6) we will work with this objective function.  Proposition 5 is perhaps the trickiest of all, in which we will be working on the clustering segment of the algorithm.
+
+\begin{proposition}
+Single-linked normalization satisfies Property 1.
+\end{proposition}
+
+\begin{proof}
+It is sufficient to show that for $x= 0$, $f(0)=0$.
+
+Since $x = 0$, it should follow that $x \in C_0$ (As zero is the smallest value in the unit interval).
+
+\begin{align*}
+  f(0) 
+  &= \dfrac{-a}{b-a} (c-a) + a
+  \\ &=\dfrac{0}{b} c                   \tag{$min(C_0) = a = 0$}
+  \\ &= 0                  \>    \qedhere
+\end{align*}
+ 
+\end{proof}
+
+\begin{proposition}
+Single-linked normalization satisfies Property 2.
+\end{proposition}
+
+\begin{proof}
+Property states that $x \neq 0 \Rightarrow f(x) \neq 0$. 
+
+We will use proof by contradiction. Let's assume  $x \neq 0$ and $\Rightarrow f(x) = 0$. Then
+
+\begin{align*}
+  f(x) 
+  &= \dfrac{x-a}{b-a} (c-a) + a = 0
+  \\ &\Rightarrow  \dfrac{x-a}{b-a} (c-a) = -a    
+  \\ &\Rightarrow  x - a= -a \dfrac{b-a}{c-a}  
+  \\ &\Rightarrow  x = -a \dfrac{b-a}{c-a} + a
+   \\ &\Rightarrow  x = -a   (1 -\dfrac{b-a}{c-a})                                              
+\end{align*}
+
+We know that $1 \geq c \geq b \geq a \geq 0$ (i.e. $\frac{min(C_{i+1})+max(C_i)}{2} \geq max(C_i) \geq min(C_i)$). Thus $1 \geq \dfrac{b-a}{c-a} \geq 0$  (for $c \neq a$), and by that we can conclude that in the equality above the value in the parentheses is zero or positive. And finally from that we may conclude $x$ is either zero or negative.
+
+However $x$ cannot be negative since $x \in [0, 1]$ as all datapoints. Furthermore x cannot be zero since our initial assumption was such that  $x \neq 0$.
+
+All in all the initial assumption lead to a \textbf{contradiction}.
+
+\end{proof}
+
+\begin{proposition}
+Single-linked normalization satisfies Property 3.
+\end{proposition}
+
+\begin{proof}
+To prove that the objective function is non-decreasing, we should simply show that the derivative is non-negative.
+
+\begin{align*}
+  \frac{d}{d(x)} f(x)
+  &= \frac{d}{d(x)} \dfrac{x-a}{b-a} (c-a) + a
+ \\ &=  \frac{b-a}{c-a} \geq 0               \>                 \tag{$1 \geq c \geq b \geq a \geq 0$}
+\end{align*}
+
+\end{proof}
+
+\begin{proposition}
+Single-linked normalization satisfies Property 4.
+\end{proposition}
+
+\begin{proof}
+We may basically use the proof of Property 3. There we had proven that the objective function $f$ is non-decreasing (i.e. $\dfrac{d}{d(x)} f(x) \geq 0$).
+
+Thus it follows that  $x_1 \geq x_2 \Longrightarrow f(x_1) \geq f(x_2)$.
+
+\end{proof}
+
+
+\begin{proposition}
+Single-linked normalization satisfies Property 6.
+\end{proposition}
+
+\begin{proof}
+In a nutshell in this proof we want to demonstrate that the clustering that Single-linked normalization computes has spacing at least as large as any arbitrary clustering possess. 
+
+Let $\clusterset = C_1,...,C_k$ be the clustering that Single-linked normalization outputs with spacing (i.e. distance between the closest pair of separated datapoint) $S$.
+
+And let $\clusterset' = C_1',...,C_k'$ some arbitrary clustering and has spacing $S'$.
+
+So once again our goal is to show that $S \geq S'$. And we may accomplish this by displaying a pair of points separated by this clustering such that the distance between those separated points is S or smaller.
+
+\textbf{Case 1:} The trivial case is when $C_i'$ 's are the same as the $C_i$ 's, possibly up to a renaming. Thus of course  exactly the same pairs of points are 
+separated into each of the clustering, so that the spacing is identical. 
+
+\textbf{Case 2:} The intriguing case is when the two clusterings fundamentally differ. Here we're going to argue  that, for any clustering which is not  merely a permutation of $\clusterset$, there has to be a pair of points which is classified differently in the  $C_i'$ 's relative to the $C_i$ 's. 
+
+By differently we mean that it should be possible to find a point pair $p, q$ such that $p, q$ belong to the same cluster $C_i$ in $\clusterset$. But in the alternative clustering $\clusterset'$ they are placed in different clusters, say $C_i', C_j'$.
+
+So here we may divide the proof into an easy case and a trickier case.
+
+We know that Single-linked normalization works in a greedy sense, i.e. the separated pair of points  that are closest to each other are the 
+ones that should get merged. So for this reason, because it's always the closest separated pair that get merged, if we examine at the sequence of 
+point pairs that get merged together, that determine the spacing in each subsequent iteration, the distances between these sort of worst separated points is only increasing over time. And this sequence culminates with the final spacing S of the algorithm. In other words, the spacing of the output of the greedy algorithm is the distance between the two clusters that would get merged if we ran the algorithm one more iteration. Thus we know that for any directly merged two points $x, y$,  the distance $\bigtriangleup (x, y) \leq S$.
+
+The easy case occurs the aforementioned point pair $p ,q$ is directly merged at some point. So our algorithm picked them at some iteration (since they constituted the shortest distance amongst separated points)., and their respective clusters were merged.
+
+Then as we have just established, the distance amongst $p$ and $q$ should be no more than $S$. However since $p$ and $q$ are contained in different clusters in $\clusterset'$, they are indeed \textit{separated points} by definition, and thus they constitute an upper bound on $S'$.
+
+Hence we have: $S' \leq \bigtriangleup(p, q) \leq S$. Therefor we've concluded the proof for the easier case of Case 2.
+ 
+The tricky case occurs when $p$ and $q$ are indirectly merged, through a series of direct merges... 
+\end{proof}
+
+\begin{proposition}
+Single-linked normalization satisfies Property 7.
+\end{proposition}
+
+\begin{proof}
+Assume we take four arbitrary datapoints  $x_1, x_2, x_3, x_4 \in C$ for which the statement below holds:
+
+
+\begin{align*}
+ & \bigtriangleup(x_1, x_2) \geq \bigtriangleup(x_3, x_4)
+ \\ &\Rightarrow |x_1 - x_2| \geq |x_3 - x_4|
+ \\ &\Rightarrow |x_1 - x_2 - (a - a)| \geq |x_3 - x_4 - (a - a)| \>                 \tag{$a - a = 0$}
+ \\ &\Rightarrow |(x_1 - a) - (x_2  - a)| \geq |(x_3  - a) - (x_4 - a)| 
+\\ &\Rightarrow |(x_1 - a) \frac{(c-a)}{(b-a)} - (x_2  - a) \frac{(c-a)}{(b-a)}| \geq |(x_3  - a) \frac{(c-a)}{(b-a)} - (x_4 - a) \frac{(c-a)}{(b-a)}|  \tag{ $\frac{(c-a)}{(b-a)} > 0$}
+ \\&\Rightarrow  |(f(x_1) - f(x_2))| \geq |(f(x_3), f(x_4))|					\tag{$\dfrac{x-a}{b-a} (c-a)=f(x)$}
+ \\&\Rightarrow  \bigtriangleup(f(x_1), f(x_2)) \geq \bigtriangleup(f(x_3), f(x_4))
+\end{align*}
+\end{proof}
+
+
+
+\begin{proposition}
+Single-linked normalization has quadratic time-complexity with respect to the number of datapoints (i.e. $\mathcal{O}(|\dataset|^2)$).
+\end{proposition}
+
+\begin{proof}
+We start the algorithm by creating a distinct cluster from each algorithm, and instantiating the initial cluster list. The time complexity for this procedure is linear wrt. datapoints, i.e.  $\mathcal{O}(|\dataset|)$.
+
+For each pair of points, the distance (metric) is computed. This is indeed an expensive procedure in the algorithm as it has quadratic ($\mathcal{O}(|\dataset|^2)$).
+
+Then closest clusters are merged till the respective input constant value equals the cardinality of the cluster list. This procedure is linear in terms of cluster number. But furthermore at each iteration, the distances with the rest of clusters is computed for the newly merged cluster (again linear). Nested loops result into quadratic behavior  ($\mathcal{O}(k) * \mathcal{O}(|\dataset|) = \mathcal{O}(k|\dataset|)$).
+
+Finally we have two more separate linear procedures, first for computing the middle point amongst consecutive clusters. The second for normalizing each datapoints within its respective clusters.
+
+All in all we have:  $\mathcal{O}(|\dataset|) + \mathcal{O}(|\dataset|^2)  + \mathcal{O}(k|\dataset|)  + \mathcal{O}(|\dataset|) + \mathcal{O}(|\dataset|) =  \mathcal{O}(k|\dataset| + |\dataset|^2) = \mathcal{O}(|\dataset|^2) $  (As $|\dataset| \geq k$).
+
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Additive normalization}
+
+
+... here our guiding principle is assigning datapoints one at a time to existing clusters, when possible...
+
+\begin{algorithm}
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\caption{Additive Normalizing Algorithm}
+\Input{$\dataset$ (instances set), $k$ (\# of clusters), $\gamma$ (threshold constant))}
+\Output{$\dataset$ (normalized instances set)}
+\BlankLine
+%$cluster\_counter = 0$\;
+Clusters $\leftarrow\emptyset$\;
+\ForEach{$d_i \in \dataset$}{
+$assigned(d_i) = false$\;
+\ForEach{$C \in Clusters$}{
+\If{$|d_i - centroid(C)| < \gamma$}{
+	$updateCentroid(C)$\;
+	$instance\_counter(C)++$;
+	$assigned(d_i) = true$\;
+	$break$\;
+		}
+	}
+
+
+\If{$!assigned(d_i)$}{
+$instance\_counter(newCluster) = 1$\;
+$centroid(newCluster = d_i)$\;
+$Clusters \leftarrow Clusters \cup newCluster$\;
+
+}
+}
+
+Mid $\leftarrow\emptyset$\;
+\ForEach{$C_i, C_{i+1} \in Clusters$}{
+$Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
+}   
+\ForEach{$C_i \in Clusters$}{
+\ForEach{$d \in C_i$}{
+$d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
+}
+}
+
+
+\label{algo_incremental}
+\end{algorithm}
+
+
+\begin{proposition}
+Additive normalization has time-complexity of  $\mathcal{O}(k|\dataset|)$.
+\end{proposition}
+
+\begin{proof}
+In the main loop of the algorithm we iterate over all of the datapoints ($\mathcal{O}(|\dataset|)$).  For each point, in the worst case we have to check all existing clusters  ($\mathcal{O}(k)$). Thus the time-complexity of the big for-loop is  $\mathcal{O}(k|\dataset|)$.
+
+As in Algorithm 1, we follow the same procedure for normalizing the values of datapoints within clusters. Hence again we have two isolated procedures that take linear time in terms of the cardinality of the dataset($\mathcal{O}(|\dataset|)$).
+
+The total time-complexity:  $\mathcal{O}(k|\dataset|)  + \mathcal{O}(|\dataset|) + \mathcal{O}(|\dataset|) =  \mathcal{O}(k|\dataset|)$.
+
+\end{proof}
 
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{K-means normalization}
+...flexible via termination condition, efficient and simple but not space-maximizing...
+
+\begin{algorithm}
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\caption{K-means Normalizing Algorithm}
+\Input{$\dataset$ (instances set), $k$ (\# of clusters), $t$ (iteration constant))}
+\Output{$\dataset$ (normalized instances set)}
+\BlankLine
+assign $k$ cluster centers $\mu_1, \mu_2,...,\mu_k$ to clusters $C_1, C_2,...C_k$\;
+\While{$t  \neq 0$}{
+\ForEach{$d_i \in \dataset$}{
+assign $d_i$ to the cluster $C$ which has the closest center(mean)\;
+}
+$Clusters \leftarrow \bigcup^k_{i=1} C_i$\;
+\ForEach{$C_i \in Clusters$}{
+$\mu_i \leftarrow \dfrac{1}{|C_i|}\sum\limits_{j=1}^{|C_i|} d_j$
+}
+
+t--\;
+}
+
+Mid $\leftarrow\emptyset$\;
+\ForEach{$C_i, C_{i+1} \in Clusters$}{
+$Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
+}   
+\ForEach{$C_i \in Clusters$}{
+\ForEach{$d \in C_i$}{
+$d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
+}
+}
+
+
+\label{algo_Kmeans}
+\end{algorithm}
+
+
+
+
+
+\begin{proposition}
+K-means normalization normalization has time-complexity of  $\mathcal{O}(t(k+|\dataset|))$.
+\end{proposition}
+
+\begin{proof}
+The main while loop iterates till the termination condition is satisfied ($\mathcal{O}(t))$.
+
+Inside the while loop we have two isolated procedures. First one iterates over each datapoint. Combined with the outer loop, we get $\mathcal{O}(t\dataset)$.
+
+The second iterates over all clusters and updates the mean info. Again combined with the outer loop, we have time complexity of  $\mathcal{O}(tk)$.
+
+As in Algorithm 1, we follow the same procedure for normalizing the values of datapoints within clusters. Hence again we have two isolated procedures that take linear time in terms of the cardinality of the dataset($\mathcal{O}(|\dataset|)$).
+
+The total time-complexity:  $\mathcal{O}(t|\dataset|)  + \mathcal{O}(tk)  + \mathcal{O}(|\dataset|) + \mathcal{O}(|\dataset|) =  \mathcal{O}(tk+t|\dataset|)$.
+
+\end{proof}
 
 
 
 \subsection{Discussion}
 
-COMPARISON OF ALGORITHMS AND GENERAL REMARKS
+COMPARISON OF ALGORITHMS COMP/PROP AND GENERAL REMARKS
 
-...the merit of the first algorithm is easily displayed via property 6. for the other two, the properties that they adhere to constitute a rather flexible class of mappings. so perhaps the merit of these algorithms is not so easily seen. however they create a better valuation for the data. "better how", this should be captured by some property or parameter that can be measured. 
+...the merit of the Single-linked normalization algorithm is easily displayed via property 6. for the other two, the properties that they adhere to constitute a rather flexible class of mappings. so perhaps the merit of these algorithms is not so easily seen. however they create a better valuation for the data. "better how", this should be captured by some property or parameter that can be measured. 
 
 
 
