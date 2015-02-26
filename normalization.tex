@@ -360,7 +360,7 @@ In the following subsection you may find the narrative of the thought process be
 Given a SAF $\saf$ and a semantic framework $\sem = \sembodyNew$, the generic standard deviation mapping $\sigma: 2^{\nat} \rightarrow \nat$, the generic mean function $\mu: 2^{\nat} \rightarrow \nat$  and constants $r_1,  r_2 \in \real^+$, the multiset of model evaluations $\dataset$ is said to be normalized dataset if the following conditions hold:
 \begin{itemize}
 \item $r_1 - \frac{\mu(D)}{\mu(T)} \geq \dfrac{max(\dataset) - min(\dataset)}{max(\ssset) - min(\ssset)} \geq r_1 + \frac{\mu(D)}{\mu(T)}$, 
-\item   $r_2 - \frac{\mu(D)}{\mu(T)} \geq \dfrac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_2 + \frac{\mu(D)}{\mu(T)}$.
+\item   $r_2 - \frac{\sigma(D)}{\sigma(T)} \geq \dfrac{\sigma(\dataset)}{\sigma(\ssset)} \geq r_2 + \frac{\sigma(D)}{\sigma(T)}$.
 \end{itemize}
 \end{definition}
 
@@ -666,16 +666,25 @@ $d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ m
 \end{comment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{remark}
 
-... the segment of the algorithm which contain the normalization routine within clusters is between lines 20 and 28. The objective function can be simply represented as:
+Crudely the normalizing algorithms consist of two parts. The first part uses some clustering method, in which we basically make a partition of the dataset and assign each point to some cluster. But keep in mind that this phase can be considered as a labeling phase, in the sense that the model evaluation values(points) are not modified.
+
+The following step is the update phase, where we normalize the values within clusters. So we may think of the normalizing method as the composition of two methods $\sigma = \gamma o \delta$, the labelling phase $\gamma$ and the update phase $\delta$.
+
+Since the labelling phase does not modify the values, it seems as if we may focus on the mapping that the update phase implements for the proof of the desirable properties, except the max-spacing property which particularly focuses on clustering.
+
+The update phase of the algorithm which contain the normalization routine within clusters is between lines 20 and 28. The objective function can be simply represented as:
 
 \begin{center}
-$f(x) = \dfrac{x-min(C_i)}{max(C_i)-min(C_i)} (Mid[i]-min(C_i)) +min(C_i) = \dfrac{x-a}{b-a} (c-a) + a$
+$\delta_{\dataset}(x) = \dfrac{x-min(C_i)}{max(C_i)-min(C_i)} (Mid[i]-min(C_i)) +min(C_i) = \dfrac{x-a}{b-a} (c-a) + a$
 \end{center}
 
 where $x$ is the datapoint that goes under normalization, $min(C_i)$\emph{(=a)} and $max(C_i)$\emph{(=b)} are the minumum and maximum elements(respectively) of the cluster $C_i$ that $x$ belongs to, $Mid[i]$\emph{(=c)} is the middle point amongst cluster $C_i$ and $C_{i+1}$.
 
-For the upcoming proofs, except Proposition 5 (regarding Property 6) we will work with this objective(update) function.  Proposition 5 is perhaps the trickiest of all, in which we will be working on the clustering segment of the algorithm.
+As mentioned, for the upcoming proofs, except Proposition 5 (regarding Property 6) we will work with this objective(update) function.  Proposition 5 is perhaps the trickiest of all, in which we will be working on the clustering segment of the algorithm.
+
+\end{remark}
 
 \begin{proposition}
 Single-linked normalization satisfies Property 1.
