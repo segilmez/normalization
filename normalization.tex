@@ -12,13 +12,14 @@
 \newtheorem{example}{Example}
 \newtheorem{notation}{Notation}
 \newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Algorithms and pseudo code
 \usepackage[lined,boxed,linesnumbered]{algorithm2e}
 
-%\usepackage{verbatim}
+%\usepackage1{verbatim}
 %\usepackage{algorithm}
 %\usepackage{algorithmicx}
 %\usepackage{algpseudocode}
@@ -451,7 +452,7 @@ For example, assume two sets $A = \{1, 3 ,5, 7\}$ and $B = \{5, 50, 500, 5000\}$
 
 
 \vspace{3mm}
-For the upcoming property definitions, let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function,  $\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric, $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$.
+For the upcoming property definitions, let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework,  $M(a) = d \in \dataset$ be the model evaluation of an argument $a \in \args$, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ a normalizing function with some metric  $\bigtriangleup: \valueset \times \valueset \rightarrow \real$.
 
 \begin{property}  [Bottom argument] The argument of a context with the bottom value does not attain any strength in the normalized mutliset.
 \begin{center}
@@ -553,7 +554,7 @@ One last discussion before we continue to the last property is $k$, the number o
 ... Property \ref{prop:ConDis} cannot be satisfied by any methodology in some cases (i.e. set of model evaluations include 0 and 1) together with some other properties. But with the introduction of the clustering related concepts, we define a relaxed version of the property by limiting the restriction within clusters.
 
 \begin{property} [Conservation of distance ordering within clusters] Given a clustering $\clusterset$, the relative order between the distance of pairs of normalized model evaluations is preserved within each cluster $C \in \clusterset$. 
-\label{prop:ConDis}
+\label{prop:ConDisClus}
 \begin{center}
  $\bigtriangleup(d_1, d_2) \geq \bigtriangleup(d_3, d_4) \Longrightarrow 
 \bigtriangleup(\sigma_{\dataset}(d_1), \sigma_{\dataset}(d_2)) \geq \bigtriangleup(\sigma_{\dataset}(d_3), \sigma_{\dataset}(d_4))$\\
@@ -562,6 +563,19 @@ where $d_1, d_2, d_3, d_4 \in C$
 \end{center}
 \end{property}
 
+After defining the \emph{watered down version} of the property regarding the relative distance ordering, we may define the desired mapping which basically consists of the \emph{non-conflicting} subset of the aforementioned properties.
+
+\begin{definition} [Desired mapping] 
+Given a SAF $\saf$, a semantic framework $\sem = \sembodyNew$, the multiset of model evaluations of all arguments $\dataset = \{M(a)|a \in \args$\} and some metric $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$, a normalizing mapping $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ with clustering $\clusterset$ is said to be a desired mapping if it obeys the following properties:
+\begin{itemize}
+\item Bottom argument (Property 1),
+\item Guarantee for the existence of arguments (Property 2),
+\item Non-decreasing affect (Property 3),
+\item Conservation of the relative ordering (Property 4),
+\item Maximum spacing over clustering (Property 6),
+\item Conservation of the relative ordering within clusters (Property 7).
+\end{itemize}
+\end{definition}
 
 %\hspace{20mm}
 
@@ -615,7 +629,7 @@ Mid $\leftarrow\emptyset$\;
 \ForEach{$C_i, C_{i+1} \in Clusters$}{
 $Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
 }   
-\ForEach{$C_i \in Clusters$}{
+\ForEach{$C_i \in Clusters$\textbackslash $C_k$ }{
 \ForEach{$d \in C_i$}{
 $d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
 }
@@ -661,19 +675,22 @@ $f(x) = \dfrac{x-min(C_i)}{max(C_i)-min(C_i)} (Mid[i]-min(C_i)) +min(C_i) = \dfr
 
 where $x$ is the datapoint that goes under normalization, $min(C_i)$\emph{(=a)} and $max(C_i)$\emph{(=b)} are the minumum and maximum elements(respectively) of the cluster $C_i$ that $x$ belongs to, $Mid[i]$\emph{(=c)} is the middle point amongst cluster $C_i$ and $C_{i+1}$.
 
-For the upcoming proofs, except Proposition 5 (regarding Property 6) we will work with this objective function.  Proposition 5 is perhaps the trickiest of all, in which we will be working on the clustering segment of the algorithm.
+For the upcoming proofs, except Proposition 5 (regarding Property 6) we will work with this objective(update) function.  Proposition 5 is perhaps the trickiest of all, in which we will be working on the clustering segment of the algorithm.
 
 \begin{proposition}
 Single-linked normalization satisfies Property 1.
 \end{proposition}
 
 \begin{proof}
-It is sufficient to show that for $x= 0$, $f(0)=0$.
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements and some arbitrary $k \in \mathbb{Z}^{+}$. %$\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric,
+
+
+To prove the property, it is sufficient to show that for $x= 0$, $\sigma_{\dataset}(0)=0$.
 
 Since $x = 0$, it should follow that $x \in C_0$ (As zero is the smallest value in the unit interval).
 
 \begin{align*}
-  f(0) 
+  \sigma_{\dataset}(0) 
   &= \dfrac{-a}{b-a} (c-a) + a
   \\ &=\dfrac{0}{b} c                   \tag{$min(C_0) = a = 0$}
   \\ &= 0                  \>    \qedhere
@@ -686,12 +703,14 @@ Single-linked normalization satisfies Property 2.
 \end{proposition}
 
 \begin{proof}
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements, some arbitrary $k \in \mathbb{Z}^{+}$ and assume $\nexists a \in \args$ s.t. $M(a) = 0$. %$\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric,
+
 Property states that $x \neq 0 \Rightarrow f(x) \neq 0$. 
 
-We will use proof by contradiction. Let's assume  $x \neq 0$ and $\Rightarrow f(x) = 0$. Then
+We will use proof by contradiction. Let's assume  $x \neq 0$ and $\Rightarrow \sigma_{\dataset}(x) = 0$. Then
 
 \begin{align*}
-  f(x) 
+  \sigma_{\dataset}(x) 
   &= \dfrac{x-a}{b-a} (c-a) + a = 0
   \\ &\Rightarrow  \dfrac{x-a}{b-a} (c-a) = -a    
   \\ &\Rightarrow  x - a= -a \dfrac{b-a}{c-a}  
@@ -712,10 +731,12 @@ Single-linked normalization satisfies Property 3.
 \end{proposition}
 
 \begin{proof}
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements and some arbitrary $k \in \mathbb{Z}^{+}$.
+
 To prove that the objective function is non-decreasing, we should simply show that the derivative is non-negative.
 
 \begin{align*}
-  \frac{d}{d(x)} f(x)
+  \frac{d}{d(x)} \sigma_{\dataset}(x)
   &= \frac{d}{d(x)} \dfrac{x-a}{b-a} (c-a) + a
  \\ &=  \frac{b-a}{c-a} \geq 0               \>                 \tag{$1 \geq c \geq b \geq a \geq 0$}
 \end{align*}
@@ -727,9 +748,9 @@ Single-linked normalization satisfies Property 4.
 \end{proposition}
 
 \begin{proof}
-We may basically use the proof of Property 3. There we had proven that the objective function $f$ is non-decreasing (i.e. $\dfrac{d}{d(x)} f(x) \geq 0$).
+We may basically use the proof of Property 3. There we had proven that the objective function $f$ is non-decreasing (i.e. $\dfrac{d}{d(x)} \sigma_{\dataset}(x) \geq 0$).
 
-Thus it follows that  $x_1 \geq x_2 \Longrightarrow f(x_1) \geq f(x_2)$.
+Thus under the same assumptions, it follows that  $x_1 \geq x_2 \Longrightarrow \sigma_{\dataset}(x_1) \geq \sigma_{\dataset}(x_2)$.
 
 \end{proof}
 
@@ -774,7 +795,9 @@ Single-linked normalization satisfies Property 7.
 \end{proposition}
 
 \begin{proof}
-Assume we take four arbitrary datapoints  $x_1, x_2, x_3, x_4 \in C$ for which the statement below holds:
+Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm(SLN) implements, $\bigtriangleup(x,y) \mapsto |x - y|$ be the metric SLN utilizes, $\clusterset$ be the clustering SNL produces and some arbitrary $k \in \mathbb{Z}^{+}$.
+
+Assume we take four arbitrary datapoints  $x_1, x_2, x_3, x_4 \in C$ from an arbitrary $C in \clusterset$, for which the following statement holds:
 
 
 \begin{align*}
@@ -782,9 +805,9 @@ Assume we take four arbitrary datapoints  $x_1, x_2, x_3, x_4 \in C$ for which t
  \\ &\Rightarrow |x_1 - x_2| \geq |x_3 - x_4|
  \\ &\Rightarrow |x_1 - x_2 - (a - a)| \geq |x_3 - x_4 - (a - a)| \>                 \tag{$a - a = 0$}
  \\ &\Rightarrow |(x_1 - a) - (x_2  - a)| \geq |(x_3  - a) - (x_4 - a)| 
-\\ &\Rightarrow |(x_1 - a) \frac{(c-a)}{(b-a)} - (x_2  - a) \frac{(c-a)}{(b-a)}| \geq |(x_3  - a) \frac{(c-a)}{(b-a)} - (x_4 - a) \frac{(c-a)}{(b-a)}|  \tag{ $\frac{(c-a)}{(b-a)} > 0$}
- \\&\Rightarrow  |(f(x_1) - f(x_2))| \geq |(f(x_3), f(x_4))|					\tag{$\dfrac{x-a}{b-a} (c-a)=f(x)$}
- \\&\Rightarrow  \bigtriangleup(f(x_1), f(x_2)) \geq \bigtriangleup(f(x_3), f(x_4))
+\\ &\Rightarrow |(x_1 - a) \frac{(c-a)}{(b-a)} - x_2  - a) \frac{(c-a)}{(b-a)}| \geq |(x_3  - a) \frac{(c-a)}{(b-a)} - (x_4 - a) \frac{(c-a)}{(b-a)}|  \tag{ $\frac{(c-a)}{(b-a)} > 0$}
+ \\&\Rightarrow  |(\sigma_{\dataset}(x_1) - \sigma_{\dataset}(x_2))| \geq |(\sigma_{\dataset}(x_3), \sigma_{\dataset}(x_4))|					\tag{$\dfrac{x-a}{b-a} (c-a)=\sigma_{\dataset}(x)$}
+ \\&\Rightarrow  \bigtriangleup(\sigma_{\dataset}(x_1), \sigma_{\dataset}(x_2)) \geq \bigtriangleup(\sigma_{\dataset}(x_3), \sigma_{\dataset}(x_4))
 \end{align*}
 \end{proof}
 
@@ -852,7 +875,7 @@ Mid $\leftarrow\emptyset$\;
 \ForEach{$C_i, C_{i+1} \in Clusters$}{
 $Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
 }   
-\ForEach{$C_i \in Clusters$}{
+\ForEach{$C_i \in Clusters$\textbackslash $C_k$}{
 \ForEach{$d \in C_i$}{
 $d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
 }
@@ -913,7 +936,7 @@ t--\;
 }
 
 Mid $\leftarrow\emptyset$\;
-\ForEach{$C_i, C_{i+1} \in Clusters$}{
+\ForEach{$C_i, C_{i+1} \in Clusters$\textbackslash $C_k$}{
 $Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
 }   
 \ForEach{$C_i \in Clusters$}{
