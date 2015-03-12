@@ -8,6 +8,7 @@
 \newtheorem{definition}{Definition}
 \newtheorem{property}{Property}
 \newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
 \newtheorem{conjecture}{Conjecture}
 \newtheorem{example}{Example}
 \newtheorem{notation}{Notation}
@@ -686,9 +687,9 @@ As mentioned, for the upcoming proofs, except Proposition 5 (regarding Property 
 
 \end{remark}
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 1.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements and some arbitrary $k \in \mathbb{Z}^{+}$. %$\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric,
@@ -707,9 +708,9 @@ Since $x = 0$, it should follow that $x \in C_0$ (As zero is the smallest value 
  
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 2.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements, some arbitrary $k \in \mathbb{Z}^{+}$ and assume $\nexists a \in \args$ s.t. $M(a) = 0$. %$\bigtriangleup: \valueset \times \valueset \rightarrow \real$ a metric,
@@ -735,9 +736,9 @@ All in all the initial assumption lead to a \textbf{contradiction}.
 
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 3.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm implements and some arbitrary $k \in \mathbb{Z}^{+}$.
@@ -752,9 +753,9 @@ To prove that the objective function is non-decreasing, we should simply show th
 
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 4.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 We may basically use the proof of Property 3. There we had proven that the objective function $f$ is non-decreasing (i.e. $\dfrac{d}{d(x)} \sigma_{\dataset}(x) \geq 0$).
@@ -764,9 +765,9 @@ Thus under the same assumptions, it follows that  $x_1 \geq x_2 \Longrightarrow 
 \end{proof}
 
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 6.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 In a nutshell in this proof we want to demonstrate that the clustering that Single-linked normalization computes has spacing at least as large as any arbitrary clustering possess. 
@@ -799,9 +800,9 @@ Hence we have: $S' \leq \bigtriangleup(p, q) \leq S$. Therefor we've concluded t
 The tricky case occurs when $p$ and $q$ are indirectly merged, through a series of direct merges... 
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Single-linked normalization satisfies Property 7.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 Let $\saf$ be a SAF, $\sem = \sembodyNew$ a semantic framework, $\dataset = \{M(a)|a \in \args$\} be the multiset of model evaluations of all arguments, $\sigma_{\dataset}: \dataset  \rightarrow  [0,1]$ the function that single-linked normalization algorithm(SLN) implements, $\bigtriangleup(x,y) \mapsto |x - y|$ be the metric SLN utilizes, $\clusterset$ be the clustering SNL produces and some arbitrary $k \in \mathbb{Z}^{+}$.
@@ -820,7 +821,18 @@ Assume we take four arbitrary datapoints  $x_1, x_2, x_3, x_4 \in C$ from an arb
 \end{align*}
 \end{proof}
 
+\begin{theorem}
+Single-linked normalization is a desired mapping.
+\end{theorem}
 
+\begin{proof}
+\begin{itemize}
+\item Firstly via Lemma 5 we have shown that Single-linked normalization has maximum-spacing. That was the only property we had to prove regarding to the labeling phase.
+\item By Remark 1, we had demonstrated the mapping implemented by the Single-linked normalization. In Lemma 1,2,3,4 and 6 we have proved that the particular mapping satisfies properties 1,2,3,4 and 7 respectively.
+\end{itemize}
+
+In conjunction, Single-linked normalization satisfied the list of properties considering the class of desired mappings.
+\end{proof}
 
 \begin{proposition}
 Single-linked normalization has quadratic time-complexity with respect to the number of datapoints (i.e. $\mathcal{O}(|\dataset|^2)$).
