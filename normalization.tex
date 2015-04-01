@@ -852,6 +852,64 @@ All in all we have:  $\mathcal{O}(|\dataset|) + \mathcal{O}(|\dataset|^2)  + \ma
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Furthest normalization}
+
+The algorithm is pretty similar to the prior one, barring the merge condition in the labeling phase. Here in order to select the next cluster pair that's to be merged, the furthest datapoints in the clusters are considered rather than the closest ones.
+
+In order to think about this in a different way, imagine the datapoints as nodes of a graph and assume that there are edges between the nodes if the distance between the datapoints is smaller than some threshold $\alpha$. In graph theoretic terminology, in Single-linked normalization algorithm(the max-spacing)  we were looking for connected components, and now in the new one we are looking for cliques.
+
+Thus Furthest normalization algorithm is not max-spacing, but on the other hand it results into more compact clusters than before.
+
+\begin{algorithm}
+\SetKwData{Left}{left}
+\SetKwData{This}{this}
+\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}
+\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\caption{Furthest Normalizing Algorithm}
+\Input{$\dataset$ (instances set), k (\# of clusters))}
+\Output{$\dataset$ (normalized instances set)}
+\BlankLine
+$cluster\_counter = 0$\;
+Clusters $\leftarrow\emptyset$\;
+\ForEach{$d_i \in \dataset$}{
+$newCluster \leftarrow \{d_i\}$\;
+$instance\_counter(newCluster) = 1$\;
+$Clusters \leftarrow Clusters \cup newCluster$\;
+$cluster\_counter++$\;
+}
+\ForEach{$C_i, C_j \in Clusters$}{
+$Compute$ $\bigtriangleup(C_i, C_j)$
+}   
+\While{$cluster\_counter \neq k$}{
+$(C_m, C_n) = $ two clusters closest together in $Clusters$ wrt. furthest elements\;
+$Clusters \leftarrow Clusters -\{C_m\}-\{C_n\}\cup\{C_m\cup C_n\}$\;
+$cluster\_counter--$\;
+\ForEach{$C \in Clusters$}{
+$Compute$ $\bigtriangleup(C, (C_m\cup C_n))$\;
+}
+}
+Mid $\leftarrow\emptyset$\;
+\ForEach{$C_i, C_{i+1} \in Clusters$}{
+$Mid \leftarrow Mid \cup \{(max(C_i) + min(C_{i+1}) / 2)\}$\;
+}   
+\ForEach{$C_i \in Clusters$\textbackslash $C_k$ }{
+\ForEach{$d \in C_i$}{
+$d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ min(C_i)$\;
+}
+}
+\label{algo_furthest}
+\end{algorithm}
+
+%Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ when $i \neq j$. %
+\begin{conjecture} Let $d_1, d_2 \in C_i$. $\not\exists d_3$ s.t. $\bigtriangleup(d_1, d_3) < \bigtriangleup(d_1, d_2)$ where $d_3 \in C_j$, $C_i \neq C_j$.
+\end{conjecture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Additive normalization}
 
 
@@ -924,7 +982,7 @@ The total time-complexity:  $\mathcal{O}(k|\dataset|)  + \mathcal{O}(|\dataset|)
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALG - 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsubsection{K-means normalization}
