@@ -531,7 +531,7 @@ We continue by stating two more preliminary definitions that we will utilize in 
 
 
 \begin{definition} [Separated points] 
-Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ when $i \neq j$. 
+Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ where $i \neq j$. 
 \end{definition}
 
 \begin{notation} 
@@ -904,8 +904,10 @@ $d  \leftarrow \dfrac{d - min(C_i)}{max(C_i) - min(C_i)} (Mid[i]  - min(C_i))+ m
 \label{algo_furthest}
 \end{algorithm}
 
-%Let $\clusterset$ be a clustering of some multiset X and $C_i, C_j \in \clusterset$. Two distinct datapoints $p, q$ are said to be separated if $p \in C_i$ and  $q \in C_j$ when $i \neq j$. %
-\begin{conjecture} Let $d_1, d_2 \in C_i$. $\not\exists d_3$ s.t. $\bigtriangleup(d_1, d_3) < \bigtriangleup(d_1, d_2)$ where $d_3 \in C_j$, $C_i \neq C_j$.
+
+\begin{conjecture} Let $\clusterset$ be a clustering of some multiset X, $C_i, C_j \in \clusterset$ and $d_1, d_2 \in C_i$.
+
+ $\not\exists d_3$ s.t. $\bigtriangleup(d_1, d_3) < \bigtriangleup(d_1, d_2)$ where $d_3 \in C_j$, $C_i \neq C_j$.
 \end{conjecture}
 
 
